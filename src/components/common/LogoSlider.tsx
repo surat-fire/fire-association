@@ -57,7 +57,7 @@ const LogoSlider = () => {
 									/>
 								) : (
 									<div className="text-2xl font-bold text-gray-400 hover:text-gray-700 transition-colors">
-										{logo.name}
+										{logo.alt}
 									</div>
 								)}
 							</div>
