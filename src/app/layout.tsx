@@ -3,13 +3,14 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import CTASection from "@/components/common/CTASection";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
+const geistMono = Geist_Mono({  
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
@@ -31,6 +32,7 @@ export default function RootLayout({
       >
         <Navbar />
         {children}
+        <CTASection label="Contact" title="Get Involved" description="Tell us your interest and we’ll reach out." buttonText="Contact Us" buttonLink="#" />
         <Footer />
       </body>
     </html>

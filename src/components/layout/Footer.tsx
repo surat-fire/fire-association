@@ -13,7 +13,7 @@ const Footer = () => {
 
   return (
     <footer className="relative mt-24 bg-[#3b0d0d] text-white/90">
-      <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-[#4a0f0f] via-[#3b0d0d] to-[#2a0909]" />
+      <div className="absolute inset-0 pointer-events-none bg-brand-800" />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
