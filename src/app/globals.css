@@ -5,39 +5,18 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-}
-
-@layer base {
-  body {
-    @apply text-brand-800;
-  }
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --primary: #490C0C;
 }
 
 body {
-  background: var(--background);
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
   font-family: Arial, Helvetica, sans-serif;
 }
-
-@keyframes scroll {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
+a, button{
+@apply transition-all duration-300 focus:outline-none
 }
-
-.animate-scroll {
-  animation: scroll 30s linear infinite;
-}
-
-.pause-animation:hover {
-  animation-play-state: paused;
+.ct-container{
+  @apply max-w-[1440px] 2xl:px-2 px-5 w-full mx-auto
 }
