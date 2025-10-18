@@ -2,21 +2,79 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: "Nunito Sans";
+  src: url("../font/NunitoSans-Light.ttf") format("truetype");
+  font-weight: 300;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Nunito Sans";
+  src: url("../font/NunitoSans-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Nunito Sans";
+  src: url("../font/NunitoSans-Bold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Nunito Sans";
+  src: url("../font/NunitoSans-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --primary: #490C0C;
+  --primary: #490c0c;
 }
 
 body {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Nunito Sans", sans-serif;
 }
-a, button{
-@apply transition-all duration-300 focus:outline-none
+a,
+button {
+  @apply transition-all duration-300 focus:outline-none;
 }
-.ct-container{
-  @apply max-w-[1440px] 2xl:px-2 px-5 w-full mx-auto
+.ct-container {
+  @apply max-w-[1440px] 2xl:px-2 px-5 w-full mx-auto;
+}
+
+/* Logo Auto Slider */
+.track-right-to-left {
+  animation: smoothMarqueeLeft 50s linear infinite;
+}
+.track-left-to-right {
+  animation: smoothMarqueeRight 50s linear infinite;
+}
+.marquee-slide {
+  flex: 0 0 130px;
+  width: 130px;
+}
+.marquee-wrapper:hover .marquee-track {
+  animation-play-state: paused;
+}
+.PhoneInputInput {
+  outline: none;
+}
+a {
+  @apply transition-all duration-300;
+}
+@keyframes smoothMarqueeLeft {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(calc(-100% / 3));
+  }
+}
+.main-join-card-block:hover .icon-img img {
+  filter: brightness(0) invert(1);
 }

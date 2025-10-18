@@ -1,19 +1,20 @@
-// components/HeroSection.js
+
 import Image from "next/image";
 import React from "react";
 
 const HeroSection = () => {
   return (
-    <div className="relative w-full h-screen m-2 border rounded-md">
-      <div className="absolute inset-0">
-        <Image 
-          src="/img/hero-image.png" 
-          fill
-          alt="hero-image" 
-          className="object-cover"
-          priority
-        />
-        <div className="absolute inset-0 bg-black/20"></div>
+    <div className="relative w-full pt-5 sm:pb-16 pb-10">
+      <div className="ct-container">
+        <div className="w-full rounded-[20px] sm:h-screen overflow-hidden">
+          <Image
+            src="/img/hero-bg.webp"
+            width={1920}
+            height={1080}
+            alt="hero-image"
+            className="object-cover w-full h-full "
+          />
+        </div>
       </div>
     </div>
   );

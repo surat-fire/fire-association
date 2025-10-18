@@ -3,70 +3,67 @@ import React from "react";
 import Image from "next/image";
 
 const LogoSlider = () => {
+  // Original slide data
+  const slides = [
+    {
+      id: 1,
+      image: "/img/lenovo.webp",
+      name: "lenovo",
+    },
+    {
+      id: 2,
+      image: "/img/paupal.webp",
+      name: "paupal",
+    },
+    {
+      id: 3,
+      image: "/img/shopify.webp",
+      name: "shopify",
+    },
+    {
+      id: 4,
+      image: "/img/spotify.webp",
+      name: "spotify",
+    },
+    {
+      id: 5,
+      image: "/img/amazon.webp",
+      name: "amazon",
+    },
+    {
+      id: 6,
+      image: "/img/google.webp",
+      name: "google",
+    },
+  ];
 
-	const logos = [
-		{
-			src: "/icons/spotify-logo.webp",
-			alt: "spotify"
-		},
-		{
-			src: "/icons/amazon-logo.webp",
-			alt: "amazon"
-		},
-		{
-			src: "/icons/google-logo.webp",
-			alt: "google"
-		},
-		{
-			src: "/icons/lenovo-logo.webp",
-			alt: "lenovo"
-		},
-		{
-			src: "/icons/paypal-logo.webp",
-			alt: "paypal"
-		},
-		{
-			src: "/icons/shopify-logo.webp",
-			alt: "shopify"
-		},
-	]
+  const extendedSlides = [...slides, ...slides, ...slides];
 
-	const duplicatedLogos = [...logos, ...logos];
-
-	return (
-		<section className="py-16 px-4 bg-gray-50 overflow-hidden">
-			<div className="max-w-7xl mx-auto">
-				<div className="relative">
-					<div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-gray-50 to-transparent z-10"></div>
-					<div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-gray-50 to-transparent z-10"></div>
-
-					<div className="flex animate-scroll hover:pause-animation">
-						{duplicatedLogos.map((logo, index) => (
-							<div
-								key={index}
-								className="flex-shrink-0 mx-8 flex items-center justify-center"
-								style={{ minWidth: "150px" }}
-							>
-								{logo.src ? (
-									<Image
-										src={logo.src}
-										alt={logo.alt || "Logo"}
-										width={120}
-										height={60}
-										className="object-contain grayscale hover:grayscale-0 transition-all duration-300 opacity-60 hover:opacity-100"
-									/>
-								) : (
-									<div className="text-2xl font-bold text-gray-400 hover:text-gray-700 transition-colors">
-										{logo.alt}
-									</div>
-								)}
-							</div>
-						))}
-					</div>
-				</div>
-			</div>
-		</section>
-	);
+  return (
+    <section className="w-full relative sm:py-14 py-10">
+      <div className="marquee-container overflow-hidden">
+        <div className="marquee-wrapper overflow-hidden w-full relative">
+          <div className="marquee-track flex items-start w-fit md:gap-20 sm:gap-10 gap-8 track-right-to-left">
+            {extendedSlides.map((slide, index) => (
+              <div key={`${slide.id}-${index}`} className="marquee-slide">
+                <div className="">
+                  <div className="w-[120px] h-10 opacity-70 hover:opacity-100 transition-all duration-300">
+                    <Image
+                      alt={slide.name}
+                      src={slide.image}
+                      width={120}
+                      height={40}
+                      className="w-full h-full object-contain"
+                    />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
 };
 
 export default LogoSlider;

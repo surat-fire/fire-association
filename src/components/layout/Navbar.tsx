@@ -1,75 +1,129 @@
-// components/Navbar.js
-import React from "react";
+"use client";
+
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Button } from "../ui/Button";
+import Image from "next/image";
+import { usePathname } from "next/navigation";
+import { HiOutlineMenuAlt1 } from "react-icons/hi";
+import { MdClose } from "react-icons/md";
 
 const Navbar = () => {
-	return (
-		<nav className="absolute top-10 left-0 right-0 z-50">
-			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-				<div className="flex items-center justify-between h-20">
-					<div className="hidden w-full md:flex items-center justify-between gap-8 bg-white/95 backdrop-blur-sm rounded-full px-8 py-4 shadow-lg">
-						<Link href="/">
-							<div className="flex items-center gap-2">
-								<div className="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center">
-									<svg
-										className="w-5 h-5 text-white"
-										fill="currentColor"
-										viewBox="0 0 20 20"
-									>
-										<path d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" />
-									</svg>
-								</div>
-								<div>
-									<div className="text-xl font-bold text-gray-900">SURAT</div>
-									<div className="text-xs text-gray-600">FIRE ASSOCIATION</div>
-								</div>
-							</div>
-						</Link>
-						<div className="md:flex items-center gap-8">
-							<Link href="/" className="text-gray-900 font-medium hover:text-red-600 transition">
-								Home
-							</Link>
-							<Link href="/about" className="text-gray-600 hover:text-red-600 transition">
-								About Us
-							</Link>
-							<Link href="/event" className="text-gray-600 hover:text-red-600 transition">
-								Event
-							</Link>
-							<Link href="/blog" className="text-gray-600 hover:text-red-600 transition">
-								Blog
-							</Link>
-							<Link href="/member" className="text-gray-600 hover:text-red-600 transition">
-								Member
-							</Link>
-						</div>
-						<div>
-							<Link href="/contact">
-								<Button>
-									Contact Us
-								</Button>
-							</Link>
-						</div>
-					</div>
-					<button className="md:hidden bg-white p-3 rounded-full shadow-lg">
-						<svg
-							className="w-6 h-6 text-gray-900"
-							fill="none"
-							stroke="currentColor"
-							viewBox="0 0 24 24"
-						>
-							<path
-								strokeLinecap="round"
-								strokeLinejoin="round"
-								strokeWidth={2}
-								d="M4 6h16M4 12h16M4 18h16"
-							/>
-						</svg>
-					</button>
-				</div>
-			</div>
-		</nav>
-	);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false); 
+  const pathname = usePathname();
+
+  const menuItems = [
+    { name: "Home", link: "/" },
+    { name: "About Us", link: "/about" },
+    { name: "Event", link: "/event" },
+    { name: "Blog", link: "/blog" },
+    { name: "Member", link: "/member" },
+  ];
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 50) setScrolled(true);
+      else setScrolled(false);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  return (
+    <header
+      className={`w-full fixed  left-0 right-0 z-50 max-w-[1280px] mx-auto px-5 transition-all duration-300 ${
+        scrolled ? "top-4" : "lg:top-10 top-8 "
+      } `}
+    >
+      <div className="w-full sm:px-5 px-3">
+        <div
+          className={`w-full rounded-full bg-white lg:px-[30px] sm:px-5 px-3 flex items-center justify-between py-2 border ${
+            scrolled ? "border-[var(--primary)] " : "border-transparent "
+          }`}
+        >
+          <Link href="/">
+            <Image
+              src="/img/logo.webp"
+              width={200}
+              height={56}
+              alt="hero-image"
+              className="object-contain sm:w-[154px] h-auto w-[100px]"
+            />
+          </Link>
+
+          <div className="hidden md:block">
+            <div className="flex items-center gap-6">
+              {menuItems.map((item) => {
+                const isActive = pathname === item.link;
+                return (
+                  <Link
+                    key={item.name}
+                    href={item.link}
+                    className={`text-[13px] font-medium leading-4 hover:text-[var(--primary)] ${
+                      isActive
+                        ? "text-[var(--primary)]"
+                        : "text-[rgba(176,176,176,1)]"
+                    }`}
+                  >
+                    {item.name}
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="w-fit flex items-center sm:gap-4 gap-2">
+            <div>
+              <Link href="/contact">
+                <Button>Contact Us</Button>
+              </Link>
+            </div>
+
+            <button
+              className="md:hidden"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            >
+              <HiOutlineMenuAlt1 className="w-7 h-7 text-[var(--primary)]" />
+            </button>
+          </div>
+        </div>
+
+        {isMobileMenuOpen && (
+          <div className="md:hidden fixed right-0 top-0 h-dvh overflow-auto bg-white w-[300px] z-40 shadow-[0_0_40px_rgba(0,0,0,0.6)]">
+            <div className="w-full p-5 flex justify-end">
+              <button
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="p-0"
+              >
+                <MdClose className="w-7 h-7 text-[var(--primary)]" />
+              </button>
+            </div>
+            <div className="flex flex-col gap-5 p-5">
+              {menuItems.map((item) => {
+                const isActive = pathname === item.link;
+                return (
+                  <Link
+                    key={item.name}
+                    href={item.link}
+                    className={`text-lg font-medium leading-4 hover:text-[var(--primary)] ${
+                      isActive
+                        ? "text-[var(--primary)]"
+                        : "text-[rgba(176,176,176,1)]"
+                    }`}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    {item.name}
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        )}
+      </div>
+    </header>
+  );
 };
 
 export default Navbar;
