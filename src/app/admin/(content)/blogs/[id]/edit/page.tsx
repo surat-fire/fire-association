@@ -6,7 +6,7 @@ import dynamic from 'next/dynamic';
 import { apiRequest, apiRequestWithFormData } from '@/lib/api';
 
 // Dynamically import ReactQuill to avoid SSR issues
-const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
+const ReactQuill = dynamic(() => import('react-quill-new'), { ssr: false });
 import 'react-quill/dist/quill.snow.css';
 
 interface Blog {
@@ -318,7 +318,6 @@ export default function EditBlogPage() {
                 value={formData.content}
                 onChange={handleContentChange}
                 modules={quillModules}
-                formats={quillFormats}
                 placeholder="Write your blog content here..."
                 style={{ minHeight: '300px' }}
               />

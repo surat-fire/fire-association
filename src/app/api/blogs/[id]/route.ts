@@ -7,19 +7,21 @@ import mongoose from 'mongoose';
 // GET /api/blogs/[id] - Get a single blog by ID
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectDB();
     
-    if (!mongoose.Types.ObjectId.isValid(params.id)) {
+    const { id } = await params;
+    
+    if (!mongoose.Types.ObjectId.isValid(id)) {
       return NextResponse.json(
         { error: 'Invalid blog ID' },
         { status: 400 }
       );
     }
     
-    const blog = await Blog.findById(params.id);
+    const blog = await Blog.findById(id);
     
     if (!blog) {
       return NextResponse.json(
@@ -41,7 +43,7 @@ export async function GET(
 // PUT /api/blogs/[id] - Update a blog
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const token = getTokenFromRequest(request);
@@ -64,7 +66,9 @@ export async function PUT(
     
     await connectDB();
     
-    if (!mongoose.Types.ObjectId.isValid(params.id)) {
+    const { id } = await params;
+    
+    if (!mongoose.Types.ObjectId.isValid(id)) {
       return NextResponse.json(
         { error: 'Invalid blog ID' },
         { status: 400 }
@@ -74,7 +78,7 @@ export async function PUT(
     const body = await request.json();
     const { title, content, excerpt, featuredImage, status, tags } = body;
     
-    const blog = await Blog.findById(params.id);
+    const blog = await Blog.findById(id);
     
     if (!blog) {
       return NextResponse.json(
@@ -106,7 +110,7 @@ export async function PUT(
 // DELETE /api/blogs/[id] - Delete a blog
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const token = getTokenFromRequest(request);
@@ -129,14 +133,16 @@ export async function DELETE(
     
     await connectDB();
     
-    if (!mongoose.Types.ObjectId.isValid(params.id)) {
+    const { id } = await params;
+    
+    if (!mongoose.Types.ObjectId.isValid(id)) {
       return NextResponse.json(
         { error: 'Invalid blog ID' },
         { status: 400 }
       );
     }
     
-    const blog = await Blog.findById(params.id);
+    const blog = await Blog.findById(id);
     
     if (!blog) {
       return NextResponse.json(
@@ -145,7 +151,7 @@ export async function DELETE(
       );
     }
     
-    await Blog.findByIdAndDelete(params.id);
+    await Blog.findByIdAndDelete(id);
     
     return NextResponse.json({ message: 'Blog deleted successfully' });
   } catch (error) {

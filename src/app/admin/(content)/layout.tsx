@@ -10,9 +10,9 @@ const layout = ({ children }: { children: React.ReactNode }) => {
 	}
 	return (
 		<div className='flex flex-col min-h-screen'>
-			<AdminSidebar />
+			<AdminHeader admin={admin} />
 			<div className='flex-1'>
-				<AdminHeader admin={admin} />
+				<AdminSidebar />
 				{children}
 			</div>
 		</div>

@@ -119,7 +119,7 @@ export default function CreateBlogPage() {
     toolbar: [
       [{ 'header': [1, 2, 3, false] }],
       ['bold', 'italic', 'underline', 'strike'],
-      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+      [{ 'list': 'ordered'}, { 'li  st': 'bullet' }],
       [{ 'indent': '-1'}, { 'indent': '+1' }],
       ['link', 'image'],
       [{ 'color': [] }, { 'background': [] }],
@@ -127,12 +127,6 @@ export default function CreateBlogPage() {
       ['clean']
     ],
   };
-
-  const quillFormats = [
-    'header', 'bold', 'italic', 'underline', 'strike',
-    'list', 'bullet', 'indent', 'link', 'image',
-    'color', 'background', 'align'
-  ];
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
