@@ -65,7 +65,7 @@ const Footer = () => {
             />
             <ul className="flex flex-wrap list-none sm:gap-5 gap-3 w-full lg:max-w-[290px] ">
               {menuItems.map((item, index) => (
-                <>
+                <div key={index}>
                   <li key={item.name}>
                     <Link
                       href={item.link}
@@ -82,7 +82,7 @@ const Footer = () => {
                       /
                     </li>
                   )}
-                </>
+                </div>
               ))}
             </ul>
           </div>

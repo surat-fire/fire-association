@@ -1,52 +1,32 @@
-export interface Event {
-  id: string;
-  image: string;
-  subject: string;
-  date: string; // YYYY-MM-DD format
-  time: string; // HH:mm format
-  venue: string;
-  details: string; // Rich text HTML content
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface CreateEventData {
-  image: string;
-  subject: string;
-  date: string;
+export interface AgendaItem {
   time: string;
-  venue: string;
-  details: string;
+  title: string;
 }
 
-export interface UpdateEventData extends Partial<CreateEventData> {
-  id: string;
+export interface IEventResponse {
+  data: IEvent[];
+  success: boolean;
+  message: string;
 }
 
-export interface EventFormData {
-  image: string;
-  subject: string;
+export interface IEventSpecificResponse {
+  data: IEvent;
+  success: boolean;
+  message: string;
+}
+
+export interface IEvent {
+  _id?: string;
+  title: string;
+  description?: string;
   date: string;
-  time: string;
-  venue: string;
-  details: string;
-}
-
-export interface EventResponse {
-  success: boolean;
-  data?: Event;
-  error?: string;
-  message?: string;
-}
-
-export interface EventsListResponse {
-  success: boolean;
-  data?: Event[];
-  error?: string;
-  pagination?: {
-    page: number;
-    limit: number;
-    total: number;
-    pages: number;
-  };
+  startTime: string;
+  endTime: string;
+  location: string;
+  eventType: string;
+  agenda: AgendaItem[];
+  trainers: string[];
+  safetyChecklistUrl?: string;
+  image?: string;
+  createdAt?: string;
 }

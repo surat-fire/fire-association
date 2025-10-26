@@ -1,7 +1,6 @@
-import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-import CTASection from "@/components/common/CTASection";
+import CTASection from "@/components/common/CTAButton";
 
 export default async function RootLayout({
     children,

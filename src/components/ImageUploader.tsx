@@ -90,8 +90,6 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
         <div className="flex gap-2">
           <Button
             type="button"
-            variant="outline"
-            size="sm"
             onClick={() => fileInputRef.current?.click()}
             disabled={isUploading}
           >
@@ -101,8 +99,6 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
           {value && (
             <Button
               type="button"
-              variant="ghost"
-              size="sm"
               onClick={handleRemoveImage}
               disabled={isUploading}
             >

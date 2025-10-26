@@ -153,7 +153,7 @@ export async function DELETE(
     
     await Blog.findByIdAndDelete(id);
     
-    return NextResponse.json({ message: 'Blog deleted successfully' });
+    return NextResponse.json({ message: 'Blog deleted successfully', success: true });
   } catch (error) {
     console.error('Error deleting blog:', error);
     return NextResponse.json(

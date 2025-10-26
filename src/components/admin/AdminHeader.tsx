@@ -9,9 +9,10 @@ interface AdminHeaderProps {
     email: string;
     role: string;
   };
+  onMenuClick?: () => void;
 }
 
-export default function AdminHeader({ admin }: AdminHeaderProps) {
+export default function AdminHeader({ admin, onMenuClick }: AdminHeaderProps) {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const router = useRouter();
 
@@ -22,10 +23,11 @@ export default function AdminHeader({ admin }: AdminHeaderProps) {
   };
 
   return (
-    <div className="sticky top-0 z-10 flex-shrink-0 flex h-16 bg-white shadow">
+    <div className="sticky top-0 z-30 flex-shrink-0 flex h-16 bg-white shadow">
       <button
         type="button"
         className="px-4 border-r border-gray-200 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-red-500 lg:hidden"
+        onClick={onMenuClick}
       >
         <span className="sr-only">Open sidebar</span>
         <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">

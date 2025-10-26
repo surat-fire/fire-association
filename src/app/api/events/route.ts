@@ -1,138 +1,71 @@
-import { NextRequest, NextResponse } from 'next/server';
-import connectDB from '@/lib/mongodb';
-import Event from '@/models/Event';
-import { getTokenFromRequest, verifyToken } from '@/lib/auth';
+import { NextRequest, NextResponse } from "next/server";
+import Event from "@/models/Event";
+import { saveFile } from "@/lib/fileHelper";
+import connectDB from "@/lib/mongodb";
 
-// GET /api/events - Get all events with pagination and filtering
-export async function GET(request: NextRequest) {
+// 🧾 GET all events
+export async function GET() {
   try {
     await connectDB();
-    
-    const { searchParams } = new URL(request.url);
-    const page = parseInt(searchParams.get('page') || '1');
-    const limit = parseInt(searchParams.get('limit') || '10');
-    const search = searchParams.get('search');
-    const sortBy = searchParams.get('sortBy') || 'date';
-    const sortOrder = searchParams.get('sortOrder') || 'asc';
-    
-    const skip = (page - 1) * limit;
-    
-    // Build filter object
-    const filter: Record<string, unknown> = {};
-    if (search) {
-      filter.$or = [
-        { subject: { $regex: search, $options: 'i' } },
-        { venue: { $regex: search, $options: 'i' } },
-        { details: { $regex: search, $options: 'i' } }
-      ];
-    }
-    
-    // Build sort object
-    const sort: Record<string, 1 | -1> = {};
-    if (sortBy === 'date') {
-      sort.date = sortOrder === 'desc' ? -1 : 1;
-    } else if (sortBy === 'createdAt') {
-      sort.createdAt = sortOrder === 'desc' ? -1 : 1;
-    } else {
-      sort[sortBy] = sortOrder === 'desc' ? -1 : 1;
-    }
-    
-    const events = await Event.find(filter)
-      .sort(sort)
-      .skip(skip)
-      .limit(limit);
-    
-    const total = await Event.countDocuments(filter);
-    
-    return NextResponse.json({
-      success: true,
-      data: events,
-      pagination: {
-        page,
-        limit,
-        total,
-        pages: Math.ceil(total / limit)
-      }
-    });
-  } catch (error) {
-    console.error('Error fetching events:', error);
+    const events = await Event.find().sort({ date: 1 });
+    return NextResponse.json({ success: true, data: events });
+  } catch (error: any) {
+    console.error(error);
     return NextResponse.json(
-      { success: false, error: 'Failed to fetch events' },
+      { success: false, error: error.message },
       { status: 500 }
     );
   }
 }
 
-// POST /api/events - Create a new event
-export async function POST(request: NextRequest) {
+// ➕ POST create event (supports FormData)
+export async function POST(req: NextRequest) {
   try {
-    const token = getTokenFromRequest(request);
-    
-    if (!token) {
-      return NextResponse.json(
-        { success: false, error: 'Unauthorized' },
-        { status: 401 }
-      );
-    }
-    
-    const payload = verifyToken(token);
-    
-    if (!payload) {
-      return NextResponse.json(
-        { success: false, error: 'Invalid token' },
-        { status: 401 }
-      );
-    }
-    
     await connectDB();
-    
-    const body = await request.json();
-    const { image, subject, date, time, venue, details } = body;
-    
-    // Validation
-    if (!image || !subject || !date || !time || !venue || !details) {
-      return NextResponse.json(
-        { success: false, error: 'All fields are required' },
-        { status: 400 }
-      );
+    const formData = await req.formData();
+
+    // Extract fields
+    const title = formData.get("title");
+    const description = formData.get("description");
+    const date = formData.get("date");
+    const startTime = formData.get("startTime");
+    const endTime = formData.get("endTime");
+    const location = formData.get("location");
+    const eventType = formData.get("eventType") || "Drill";
+    const agenda = JSON.parse((formData.get("agenda") as string) || "[]");
+    const trainers = JSON.parse((formData.get("trainers") as string) || "[]");
+
+    let imagePath = "";
+    const imageFile = formData.get("image") as File;
+    if (imageFile && imageFile.size > 0) {
+      imagePath = await saveFile(imageFile, "events");
     }
-    
-    // Validate date format
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
-      return NextResponse.json(
-        { success: false, error: 'Date must be in YYYY-MM-DD format' },
-        { status: 400 }
-      );
+
+    let safetyChecklistPath = "";
+    const safetyChecklistFile = formData.get("safetyChecklistUrl") as File;
+    if (safetyChecklistFile && safetyChecklistFile.size > 0) {
+      safetyChecklistPath = await saveFile(safetyChecklistFile, "events");
     }
-    
-    // Validate time format
-    if (!/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/.test(time)) {
-      return NextResponse.json(
-        { success: false, error: 'Time must be in HH:mm format' },
-        { status: 400 }
-      );
-    }
-    
-    const event = new Event({
-      image,
-      subject,
+
+    const event = await Event.create({
+      title,
+      description,
       date,
-      time,
-      venue,
-      details
+      startTime,
+      endTime,
+      location,
+      eventType,
+      agenda,
+      trainers,
+      safetyChecklistUrl: safetyChecklistPath,
+      image: imagePath,
     });
-    
-    await event.save();
-    
-    return NextResponse.json({
-      success: true,
-      data: event,
-      message: 'Event created successfully'
-    }, { status: 201 });
-  } catch (error) {
-    console.error('Error creating event:', error);
+
+    return NextResponse.json({ success: true, data: event }, { status: 201 });
+  } catch (error: any) {
+    console.error("Error creating event:", error);
     return NextResponse.json(
-      { success: false, error: 'Failed to create event' },
+      { success: false, error: error.message },
       { status: 500 }
     );
   }

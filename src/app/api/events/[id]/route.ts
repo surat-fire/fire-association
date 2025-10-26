@@ -1,166 +1,132 @@
-import { NextRequest, NextResponse } from 'next/server';
-import connectDB from '@/lib/mongodb';
-import Event from '@/models/Event';
-import { getTokenFromRequest, verifyToken } from '@/lib/auth';
+import { NextRequest, NextResponse } from "next/server";
+import Event from "@/models/Event";
+import { saveFile, deleteFile } from "@/lib/fileHelper";
+import connectDB from "@/lib/mongodb";
 
-// GET /api/events/[id] - Get single event by ID
 export async function GET(
-  request: NextRequest,
+  req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectDB();
-    
     const { id } = await params;
     const event = await Event.findById(id);
-    
-    if (!event) {
+    if (!event)
       return NextResponse.json(
-        { success: false, error: 'Event not found' },
+        { success: false, message: "Event not found" },
         { status: 404 }
       );
-    }
-    
-    return NextResponse.json({
-      success: true,
-      data: event
-    });
-  } catch (error) {
-    console.error('Error fetching event:', error);
+    return NextResponse.json({ success: true, data: event });
+  } catch (error: any) {
+    console.error("Error fetching event:", error);
     return NextResponse.json(
-      { success: false, error: 'Failed to fetch event' },
+      { success: false, error: error.message },
       { status: 500 }
     );
   }
 }
 
-// PUT /api/events/[id] - Update event by ID
+// ✏️ UPDATE (PUT)
 export async function PUT(
-  request: NextRequest,
+  req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const token = getTokenFromRequest(request);
-    
-    if (!token) {
-      return NextResponse.json(
-        { success: false, error: 'Unauthorized' },
-        { status: 401 }
-      );
-    }
-    
-    const payload = verifyToken(token);
-    
-    if (!payload) {
-      return NextResponse.json(
-        { success: false, error: 'Invalid token' },
-        { status: 401 }
-      );
-    }
-    
     await connectDB();
-    
     const { id } = await params;
-    const body = await request.json();
-    const { image, subject, date, time, venue, details } = body;
-    
-    // Check if event exists
-    const existingEvent = await Event.findById(id);
-    if (!existingEvent) {
+    const existing = await Event.findById(id);
+    if (!existing)
       return NextResponse.json(
-        { success: false, error: 'Event not found' },
+        { success: false, message: "Event not found" },
         { status: 404 }
       );
+
+    const formData = await req.formData();
+
+    // Extract core fields
+    const title = formData.get("title");
+    const description = formData.get("description");
+    const date = formData.get("date");
+    const startTime = formData.get("startTime");
+    const endTime = formData.get("endTime");
+    const location = formData.get("location");
+    const eventType = formData.get("eventType");
+    const agenda = JSON.parse((formData.get("agenda") as string) || "[]");
+    const trainers = JSON.parse((formData.get("trainers") as string) || "[]");
+
+    // Handle image
+    let imagePath = existing.image;
+    const imageFile = formData.get("image") as File | null;
+    if (imageFile && imageFile.size > 0) {
+      await deleteFile(existing.image);
+      imagePath = await saveFile(imageFile, "events");
     }
-    
-    // Validate date format if provided
-    if (date && !/^\d{4}-\d{2}-\d{2}$/.test(date)) {
-      return NextResponse.json(
-        { success: false, error: 'Date must be in YYYY-MM-DD format' },
-        { status: 400 }
-      );
+
+    // Handle safety checklist doc
+    let safetyChecklistPath = existing.safetyChecklistUrl;
+    const checklistFile = formData.get("safetyChecklist") as File | null;
+    if (checklistFile && checklistFile.size > 0) {
+      await deleteFile(existing.safetyChecklistUrl);
+      safetyChecklistPath = await saveFile(checklistFile, "events");
     }
-    
-    // Validate time format if provided
-    if (time && !/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/.test(time)) {
-      return NextResponse.json(
-        { success: false, error: 'Time must be in HH:mm format' },
-        { status: 400 }
-      );
-    }
-    
-    // Update event
-    const updatedEvent = await Event.findByIdAndUpdate(
+
+    const updated = await Event.findByIdAndUpdate(
       id,
       {
-        ...(image && { image }),
-        ...(subject && { subject }),
-        ...(date && { date }),
-        ...(time && { time }),
-        ...(venue && { venue }),
-        ...(details && { details })
+        title,
+        description,
+        date,
+        startTime,
+        endTime,
+        location,
+        eventType,
+        agenda,
+        trainers,
+        image: imagePath,
+        safetyChecklistUrl: safetyChecklistPath,
       },
-      { new: true, runValidators: true }
+      { new: true }
     );
-    
-    return NextResponse.json({
-      success: true,
-      data: updatedEvent,
-      message: 'Event updated successfully'
-    });
-  } catch (error) {
-    console.error('Error updating event:', error);
+
+    return NextResponse.json({ success: true, data: updated });
+  } catch (error: any) {
+    console.error("Error updating event:", error);
     return NextResponse.json(
-      { success: false, error: 'Failed to update event' },
+      { success: false, error: error.message },
       { status: 500 }
     );
   }
 }
 
-// DELETE /api/events/[id] - Delete event by ID
+// 🗑️ DELETE event (also deletes uploaded files)
 export async function DELETE(
-  request: NextRequest,
+  req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const token = getTokenFromRequest(request);
-    
-    if (!token) {
-      return NextResponse.json(
-        { success: false, error: 'Unauthorized' },
-        { status: 401 }
-      );
-    }
-    
-    const payload = verifyToken(token);
-    
-    if (!payload) {
-      return NextResponse.json(
-        { success: false, error: 'Invalid token' },
-        { status: 401 }
-      );
-    }
-    
     await connectDB();
-    
     const { id } = await params;
-    const event = await Event.findByIdAndDelete(id);
-    
-    if (!event) {
+    const event = await Event.findById(id);
+    if (!event)
       return NextResponse.json(
-        { success: false, error: 'Event not found' },
+        { success: false, message: "Event not found" },
         { status: 404 }
       );
-    }
-    
+
+    // Delete files
+    if (event.image) await deleteFile(event.image);
+    if (event.safetyChecklistUrl) await deleteFile(event.safetyChecklistUrl);
+
+    await Event.findByIdAndDelete(id);
+
     return NextResponse.json({
       success: true,
-      message: 'Event deleted successfully'
+      message: "Event deleted successfully",
     });
-  } catch (error) {
-    console.error('Error deleting event:', error);
+  } catch (error: any) {
+    console.error("Error deleting event:", error);
     return NextResponse.json(
-      { success: false, error: 'Failed to delete event' },
+      { success: false, error: error.message },
       { status: 500 }
     );
   }
