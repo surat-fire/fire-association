@@ -4,6 +4,10 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ContactFormData, formSchema } from '@/lib/validation/contactUsSchema';
 import SectionTitle from '../common/SectionTitle';
+import { Button } from '../ui/Button';
+import useSendContactInfo from '@/hooks/contact/useSendContactInfo';
+import { toast } from 'react-toastify';
+import Loader from '../ui/Loader';
 
 export default function ContactForm() {
     const {
@@ -14,11 +18,15 @@ export default function ContactForm() {
     } = useForm<ContactFormData>({
         resolver: zodResolver(formSchema),
     });
+    const { mutateAsync: sendContact, isPending } = useSendContactInfo()
 
-    const onSubmit = (data: ContactFormData) => {
+    const onSubmit = async (data: ContactFormData) => {
         console.log('Form submitted:', data);
-        alert('Message sent successfully!');
-        reset();
+        const contactData = await sendContact(data)
+        if (contactData.success) {
+            toast.success(contactData.message)
+            reset();
+        }
     };
 
     return (
@@ -159,12 +167,9 @@ export default function ContactForm() {
                             </div>
 
                             {/* Submit Button */}
-                            <button
-                                type="submit"
-                                className="px-8 py-3 bg-gray-900 text-white font-medium rounded-md hover:bg-gray-800 transition-colors duration-200"
-                            >
-                                Send Message
-                            </button>
+                            <Button type='submit'>
+                                {isPending ? <Loader /> : "Send Message"}
+                            </Button>
                         </form>
                     </div>
                 </div>

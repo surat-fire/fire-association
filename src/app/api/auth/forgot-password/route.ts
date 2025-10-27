@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
 import Admin from '@/models/Admin';
 import { generateResetToken } from '@/lib/auth';
-import nodemailer from 'nodemailer';
+import { transporter } from '@/lib/mailSender';
 
 export async function POST(request: NextRequest) {
   try {
@@ -45,17 +45,7 @@ export async function POST(request: NextRequest) {
       resetPasswordExpires: resetExpires,
     });
 
-    // Send email with reset link
     try {
-      const transporter = nodemailer.createTransport({
-        host: process.env.EMAIL_HOST,
-        port: parseInt(process.env.EMAIL_PORT || '587'),
-        secure: false,
-        auth: {
-          user: process.env.EMAIL_USER,
-          pass: process.env.EMAIL_PASS,
-        },
-      });
 
       const resetUrl = `${process.env.NEXT_PUBLIC_APP_URL}/admin/reset-password?token=${resetToken}`;
 
@@ -84,7 +74,6 @@ export async function POST(request: NextRequest) {
       });
     } catch (emailError) {
       console.error('Email sending error:', emailError);
-      // Still return success to not reveal email sending issues
     }
 
     return NextResponse.json({

@@ -10,7 +10,7 @@ export const getAuthHeaders = () => {
 };
 
 export const apiRequest = async (url: string, options: RequestInit = {}) => {
-  const headers = {
+  const headers: any = {
     'Content-Type': 'application/json',
     ...getAuthHeaders(),
     ...options.headers,
@@ -30,7 +30,7 @@ export const apiRequest = async (url: string, options: RequestInit = {}) => {
 };
 
 export const apiRequestWithFormData = async (url: string, formData: FormData) => {
-  const headers = {
+  const headers: any = {
     ...getAuthHeaders(),
   };
 

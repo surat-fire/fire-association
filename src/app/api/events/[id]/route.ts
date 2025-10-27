@@ -57,9 +57,12 @@ export async function PUT(
     // Handle image
     let imagePath = existing.image;
     const imageFile = formData.get("image") as File | null;
+    console.log("imageFile ======>", imageFile)
     if (imageFile && imageFile.size > 0) {
+      console.log("in condition")
       await deleteFile(existing.image);
       imagePath = await saveFile(imageFile, "events");
+      console.log("imagePath ======>", imagePath)
     }
 
     // Handle safety checklist doc

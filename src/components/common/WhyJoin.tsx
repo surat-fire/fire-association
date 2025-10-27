@@ -39,7 +39,7 @@ const WhyJoinSection: React.FC<WhyJoinSectionProps> = ({
               <div className="flex items-center justify-center md:mb-20 sm:mb-14 mb-6 icon-img transition-all duration-300">
                 {card.icon}
               </div>
-              <span className="block text-[13px] leading-5 m-0 font-semibold text-center max-w-[240px] w-full mx-auto">
+              <span className="block text-[13px] leading-5 m-0 font-semibold text-center max-w-[240px] w-full mx-auto whitespace-pre-line">
                 {card.description}
               </span>
               <SectionTitle

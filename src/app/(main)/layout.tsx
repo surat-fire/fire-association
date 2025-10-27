@@ -9,13 +9,11 @@ export default async function RootLayout({
 }>) {
 
     return (
-        <html lang="en">
-            <body>
-                <Navbar />
-                {children}
-                <CTASection label="Contact" title="Get Involved" description="Tell us your interest and we'll reach out." buttonText="Contact Us" buttonLink="#" />
-                <Footer />
-            </body>
-        </html>
+        <>
+            <Navbar />
+            {children}
+            <CTASection label="Contact" title="Get Involved" description="Tell us your interest and we'll reach out." buttonText="Contact Us" buttonLink="#" />
+            <Footer />
+        </>
     );
 }
