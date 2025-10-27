@@ -1,9 +1,10 @@
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 require('dotenv').config({ path: '.env' });
-const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
+import { Schema, models, model, connect, disconnect } from 'mongoose';
+import { hash } from 'bcryptjs';
 
 // Admin Schema
-const AdminSchema = new mongoose.Schema({
+const AdminSchema = new Schema({
   email: {
     type: String,
     required: true,
@@ -39,7 +40,7 @@ const AdminSchema = new mongoose.Schema({
   timestamps: true,
 });
 
-const Admin = mongoose.models.Admin || mongoose.model('Admin', AdminSchema);
+const Admin = models.Admin || model('Admin', AdminSchema);
 
 async function createSuperAdmin() {
   try {
@@ -54,7 +55,7 @@ async function createSuperAdmin() {
       process.exit(1);
     }
     
-    await mongoose.connect(mongoUri);
+    await connect(mongoUri);
     console.log('Connected to MongoDB successfully');
 
     // Check if super admin already exists
@@ -67,7 +68,7 @@ async function createSuperAdmin() {
     // Create super admin
     const superAdminData = {
       email: 'admin@fire-safety.com',
-      password: await bcrypt.hash('admin123', 12),
+      password: await hash('admin123', 12),
       name: 'Super Admin',
       role: 'super_admin',
       isActive: true,
@@ -84,7 +85,7 @@ async function createSuperAdmin() {
   } catch (error) {
     console.error('Error creating super admin:', error);
   } finally {
-    await mongoose.disconnect();
+    await disconnect();
     process.exit(0);
   }
 }
