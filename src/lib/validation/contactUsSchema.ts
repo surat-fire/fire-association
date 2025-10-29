@@ -10,3 +10,13 @@ export const formSchema = z.object({
 });
 
 export type ContactFormData = z.infer<typeof formSchema>;
+
+export const MemberSchema = z.object({
+  id: z.string().optional(),
+  name: z.string().min(1, "Name is required").max(100),
+  role: z.string().min(1, "Type / Role is required").max(100),
+  // We'll accept File | null for the uploaded image client-side, but store string (dataURL) in state
+  imageFile: z.any().optional(),
+});
+
+export type MemberFormValues = z.infer<typeof MemberSchema>;

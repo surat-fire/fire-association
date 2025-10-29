@@ -42,7 +42,6 @@ export default function BlogsPage() {
   const [isDeleting, setIsDeleting] = useState(false);
   const [deletingId, setDeletingId] = useState("");
   const { mutateAsync: deleteBlog, isPending } = useDeleteBlog()
-  const router = useRouter();
 
   const fetchBlogs = async (page = 1, searchTerm = '', status = '') => {
     try {
@@ -59,7 +58,7 @@ export default function BlogsPage() {
       setPagination(data.pagination);
     } catch (error) {
       console.error('Error fetching blogs:', error);
-      alert('Failed to fetch blogs. Please check your authentication.');
+      toast.error('Failed to fetch blogs. Please check your authentication.');
     } finally {
       setLoading(false);
     }

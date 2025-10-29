@@ -18,6 +18,7 @@ interface Blog {
   status: 'draft' | 'published';
   author: string;
   tags: string[];
+  isFeatured: boolean;
   publishedAt?: string;
   createdAt: string;
   updatedAt: string;
@@ -28,6 +29,7 @@ interface BlogFormData {
   content: string;
   excerpt: string;
   featuredImage: string;
+  isFeatured: boolean
   status: 'draft' | 'published';
   tags: string;
 }
@@ -46,7 +48,8 @@ export default function EditBlogPage() {
     excerpt: '',
     featuredImage: '',
     status: 'draft',
-    tags: ''
+    tags: '',
+    isFeatured: false
   });
 
   useEffect(() => {
@@ -60,7 +63,8 @@ export default function EditBlogPage() {
           excerpt: blogData.excerpt || '',
           featuredImage: blogData.featuredImage || '',
           status: blogData.status,
-          tags: blogData.tags.join(', ')
+          tags: blogData.tags.join(', '),
+          isFeatured: blogData.isFeatured
         });
       } catch (error) {
         console.error('Error fetching blog:', error);
@@ -75,6 +79,13 @@ export default function EditBlogPage() {
       fetchBlog();
     }
   }, [params.id, router]);
+
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData((prev) => ({
+      ...prev,
+      isFeatured: e.target.checked
+    }));
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -129,7 +140,7 @@ export default function EditBlogPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!formData.title.trim() || !formData.content.trim()) {
       alert('Title and content are required');
       return;
@@ -163,8 +174,8 @@ export default function EditBlogPage() {
     toolbar: [
       [{ 'header': [1, 2, 3, false] }],
       ['bold', 'italic', 'underline', 'strike'],
-      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-      [{ 'indent': '-1'}, { 'indent': '+1' }],
+      [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+      [{ 'indent': '-1' }, { 'indent': '+1' }],
       ['link', 'image'],
       [{ 'color': [] }, { 'background': [] }],
       [{ 'align': [] }],
@@ -271,7 +282,7 @@ export default function EditBlogPage() {
                   </button>
                 </div>
               )}
-              
+
               <div>
                 <input
                   ref={fileInputRef}
@@ -361,6 +372,19 @@ export default function EditBlogPage() {
             <p className="mt-1 text-sm text-gray-500">
               Choose whether to save as draft or publish
             </p>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <input
+              id="isFeatured"
+              type="checkbox"
+              checked={formData.isFeatured}
+              onChange={handleCheckboxChange}
+              className="h-4 w-4 accent-blue-600 border-gray-300 rounded cursor-pointer"
+            />
+            <label htmlFor="isFeatured" className="text-sm font-medium text-gray-700">
+              Mark as Featured Blog
+            </label>
           </div>
         </div>
 

@@ -33,7 +33,7 @@ const SectionTitle: React.FC<SectionTitleProps> = ({
       <div className="w-full">
         {subtitle && (
           <div
-            className={`flex items-center gap-2 w-fit justify-center mb-4 mx-auto ${alignment}`}
+            className={`flex items-center gap-2 w-fit justify-center mb-2 mx-auto ${alignment}`}
           >
             <span className="block w-1.5 h-1.5 rounded-md bg-[var(--primary)] font-normal"></span>
             <p

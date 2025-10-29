@@ -2,10 +2,10 @@
 
 import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import { apiRequest, apiRequestWithFormData } from '@/lib/api';
 
-// Dynamically import ReactQuill to avoid SSR issues
 const ReactQuill = dynamic(() => import('react-quill-new'), { ssr: false });
 import 'react-quill-new/dist/quill.snow.css';
 
@@ -16,6 +16,7 @@ interface BlogFormData {
   featuredImage: string;
   status: 'draft' | 'published';
   tags: string;
+  isFeatured: boolean
 }
 
 export default function CreateBlogPage() {
@@ -29,7 +30,8 @@ export default function CreateBlogPage() {
     excerpt: '',
     featuredImage: '',
     status: 'draft',
-    tags: ''
+    tags: '',
+    isFeatured: false
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -83,9 +85,16 @@ export default function CreateBlogPage() {
     }
   };
 
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData((prev) => ({
+      ...prev,
+      isFeatured: e.target.checked
+    }));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!formData.title.trim() || !formData.content.trim()) {
       alert('Title and content are required');
       return;
@@ -117,16 +126,16 @@ export default function CreateBlogPage() {
 
   const quillModules = {
     toolbar: [
-      [{ 'header': [1, 2, 3, false] }],
+      [{ header: [1, 2, 3, false] }],
       ['bold', 'italic', 'underline', 'strike'],
-      [{ 'list': 'ordered'}, { 'li  st': 'bullet' }],
-      [{ 'indent': '-1'}, { 'indent': '+1' }],
+      [{ list: 'ordered' }, { list: 'bullet' }], // ✅ fixed
+      [{ indent: '-1' }, { indent: '+1' }],
       ['link', 'image'],
-      [{ 'color': [] }, { 'background': [] }],
-      [{ 'align': [] }],
+      [{ color: [] }, { background: [] }],
+      [{ align: [] }],
       ['clean']
     ],
-  };
+  }; 
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
@@ -184,8 +193,10 @@ export default function CreateBlogPage() {
             <div className="space-y-4">
               {formData.featuredImage && (
                 <div className="relative">
-                  <img
+                  <Image
                     src={formData.featuredImage}
+                    width={100}
+                    height={100}
                     alt="Featured"
                     className="h-48 w-full object-cover rounded-lg border border-gray-300"
                   />
@@ -200,7 +211,7 @@ export default function CreateBlogPage() {
                   </button>
                 </div>
               )}
-              
+
               <div>
                 <input
                   ref={fileInputRef}
@@ -291,6 +302,19 @@ export default function CreateBlogPage() {
               Choose whether to save as draft or publish immediately
             </p>
           </div>
+          <div className="flex items-center gap-3">
+            <input
+              id="isFeatured"
+              type="checkbox"
+              checked={formData.isFeatured}
+              onChange={handleCheckboxChange}
+              className="h-4 w-4 accent-blue-600 border-gray-300 rounded cursor-pointer"
+            />
+            <label htmlFor="isFeatured" className="text-sm font-medium text-gray-700">
+              Mark as Featured Blog
+            </label>
+          </div>
+
         </div>
 
         {/* Actions */}

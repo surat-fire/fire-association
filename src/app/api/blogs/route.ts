@@ -31,7 +31,7 @@ export async function GET(request: NextRequest) {
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)
-      .select('title status author tags publishedAt createdAt updatedAt featuredImage excerpt');
+      .select('title status author tags publishedAt createdAt updatedAt featuredImage excerpt isFeatured');
     
     const total = await Blog.countDocuments(filter);
     
@@ -77,7 +77,7 @@ export async function POST(request: NextRequest) {
     await connectDB();
     
     const body = await request.json();
-    const { title, content, excerpt, featuredImage, status, tags } = body;
+    const { title, content, excerpt, featuredImage, status, tags, isFeatured } = body;
     
     if (!title || !content) {
       return NextResponse.json(
@@ -94,7 +94,8 @@ export async function POST(request: NextRequest) {
       status: status || 'draft',
       author: payload.email,
       tags: tags || [],
-      slug: title
+      slug: title,
+      isFeatured
     });
     
     await blog.save();
