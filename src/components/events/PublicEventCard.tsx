@@ -1,12 +1,12 @@
-"use client"
+"use client";
 
-import React from 'react'
-import SectionTitle from '../common/SectionTitle'
-import { formatDate } from '@/lib/utils';
-import useGetEvents from '@/hooks/events/useGetEvents';
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import Loader from '../ui/Loader';
+import React from "react";
+import SectionTitle from "../common/SectionTitle";
+import { formatDate } from "@/lib/utils";
+import useGetEvents from "@/hooks/events/useGetEvents";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import Loader from "../ui/Loader";
 
 // const eventsData = [
 //     {
@@ -78,75 +78,81 @@ import Loader from '../ui/Loader';
 // ];
 
 const PublicEventCard = () => {
-    const router = useRouter()
-    const { data: eventsData, isLoading } = useGetEvents()
-    return (
-        <section className='relative w-full sm:pt-[60px] pt-10'>
-            <div className='ct-container'>
-                <SectionTitle
-                    subtitle="Events & Training"
-                    title="Our events strengthen fire preparedness across Surat. Want to host a training or drill?"
-                    align="center"
-                    titleClass="max-w-[440px] w-full mx-auto"
+  const router = useRouter();
+  const { data: eventsData, isLoading } = useGetEvents();
+  return (
+    <section className="relative w-full sm:pt-[60px] pt-10">
+      <div className="ct-container">
+        <SectionTitle
+          subtitle="Events & Training"
+          title="Our events strengthen fire preparedness across Surat. Want to host a training or drill?"
+          align="center"
+          titleClass="max-w-[610px] w-full mx-auto"
+        />
+        {isLoading && <Loader />}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:mt-10 mt-8">
+          {eventsData?.data.map((event, index) => (
+            <div
+              key={index}
+              className={`p-2.5 rounded-[20px] bg-[rgba(253,238,238,1)] transition-all duration-300 hover:bg-[var(--primary)] text-[var(--primary)] hover:text-white [&:hover_.arrow-btn]:bg-white`}
+            >
+              <div className="relative overflow-hidden rounded-[20px] md:h-[436px] sm:h-[300px] h-[280px]">
+                <Image
+                  src={
+                    event.image ||
+                    "https://images.unsplash.com/photo-1615461066841-6116e61058f4?w=300&q=80"
+                  }
+                  alt={event.title}
+                  width={100}
+                  height={100}
+                  className="w-full h-full object-cover "
                 />
-                {isLoading && (
-                    <Loader />
-                )}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {eventsData?.data.map((event, index) => (
-                        <div
-                            key={index}
-                            className={`rounded-3xl overflow-hidden transition-all duration-300 hover:bg-[#490C0C] bg-pink-50 hover:text-white/90 text-[#490C0C] hover:cursor-pointer`}
-                        >
-                            {/* Image */}
-                            <div className="relative h-64 overflow-hidden">
-                                <Image
-                                    src={event.image || 'https://images.unsplash.com/photo-1615461066841-6116e61058f4?w=300&q=80'}
-                                    alt={event.title}
-                                    width={100}
-                                    height={100}
-                                    className="w-full h-full object-cover p-2 rounded-3xl"
-                                />
-                            </div>
+              </div>
 
-                            <div className="p-6">
-                                <p className={`text-sm mb-2 transition-colors duration-300`}>
-                                    {formatDate(event.date)} • {event.startTime}–{event.endTime}
-                                </p>
+              <div className="p-5">
+                <p
+                  className={`text-base font-medium transition-colors duration-300`}
+                >
+                  {formatDate(event.date)} • {event.startTime}–{event.endTime}
+                </p>
 
-                                <p className={`text-sm mb-4 transition-colors duration-300`}>
-                                    {event.description}
-                                </p>
+                <p
+                  className={`text-sm font-medium transition-colors duration-300 my-4`}
+                >
+                  {event.description}
+                </p>
 
-                                <h3 className={`text-xl font-bold mb-6 transition-colors duration-300`}>
-                                    {event.title}
-                                </h3>
+                <h3
+                  className={`sm:text-2xl text-xl font-medium m-0 transition-colors duration-300`}
+                >
+                  {event.title}
+                </h3>
 
-                                <button
-                                    onClick={() => router.push(`/events/${event._id}`)}
-                                    className={`w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 hover:bg-white hover:text-brand-800`}
-                                >
-                                    <svg
-                                        className="w-5 h-5"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth={2}
-                                            d="M17 8l4 4m0 0l-4 4m4-4H3"
-                                        />
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                    ))}
-                </div>
+                <button
+                  onClick={() => router.push(`/events/${event._id}`)}
+                  className={`w-10 h-10 sm:w-14 sm:h-14 border border-[var(--primary)] rounded-full flex items-center justify-center transition-all duration-300 arrow-btn text-[var(--primary)] mt-4`}
+                >
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M17 8l4 4m0 0l-4 4m4-4H3"
+                    />
+                  </svg>
+                </button>
+              </div>
             </div>
-        </section>
-    )
-}
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
 
-export default PublicEventCard
+export default PublicEventCard;

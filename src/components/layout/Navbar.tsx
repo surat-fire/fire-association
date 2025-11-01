@@ -18,7 +18,7 @@ const Navbar = () => {
     { name: "About Us", link: "/about" },
     { name: "Event", link: "/events" },
     { name: "Blog", link: "/blogs" },
-    { name: "Member", link: "/member" },
+    { name: "Member", link: "/members" },
   ];
 
   useEffect(() => {
@@ -77,7 +77,7 @@ const Navbar = () => {
           <div className="w-fit flex items-center sm:gap-4 gap-2">
             <div>
               <Link href="/contact">
-                <Button>Contact Us</Button>
+                <Button className="max-[400px]:px-2 max-[400px]:py-1">Contact Us</Button>
               </Link>
             </div>
 

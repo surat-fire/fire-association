@@ -47,6 +47,14 @@ button {
   @apply max-w-[1440px] 2xl:px-2 px-5 w-full mx-auto;
 }
 
+
+input:-webkit-autofill {
+  background-color: rgba(221, 40, 40, 0.08) !important;
+  color: #000 !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+
 /* Logo Auto Slider */
 .track-right-to-left {
   animation: smoothMarqueeLeft 50s linear infinite;

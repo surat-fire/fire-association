@@ -7,7 +7,7 @@ const GetInTouch = () => {
     {
       icon: (
         <Image
-          src="/img/awareness-first.webp"
+          src="/img/our-office.webp"
           width={100}
           height={100}
           className="object-contain sm:w-[100px] sm:h-[100px] w-16 h-16"
@@ -21,7 +21,7 @@ const GetInTouch = () => {
     {
       icon: (
         <Image
-          src="/img/prepared-action.webp"
+          src="/img/phone-numbers.webp"
           width={100}
           height={100}
           className="object-contain sm:w-[100px] sm:h-[100px] w-16 h-16"
@@ -29,13 +29,12 @@ const GetInTouch = () => {
         />
       ),
       title: "Phone Numbers",
-      description:
-        "Main: +1-234-567-8900\nSales: +1-234-567-8901",
+      description: "Main: +1-234-567-8900\nSales: +1-234-567-8901",
     },
     {
       icon: (
         <Image
-          src="/img/unified-effort.webp"
+          src="/img/email-addresses.webp"
           width={100}
           height={100}
           className="object-contain sm:w-[100px] sm:h-[100px] w-16 h-16"
@@ -49,11 +48,13 @@ const GetInTouch = () => {
   ];
 
   return (
-    <WhyJoinSection
-      subtitle="Get in Touch"
-      title="Connect with us for all trade support needs."
-      cards={cards}
-    />
+    <div className="md:pt-12">
+      <WhyJoinSection
+        subtitle="Get in Touch"
+        title="Connect with us for all trade support needs."
+        cards={cards}
+      />
+    </div>
   );
 };
 

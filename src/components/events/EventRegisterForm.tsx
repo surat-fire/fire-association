@@ -106,7 +106,7 @@ const EventRegisterForm = () => {
                 </div>
 
                 {/* Submit Button */}
-                <Button type='submit'>
+                <Button type='submit' className='sm:py-4 sm:text-base mt-5'>
                     Register Now
                 </Button>
             </form>

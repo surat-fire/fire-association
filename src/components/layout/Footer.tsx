@@ -52,7 +52,7 @@ const Footer = () => {
     },
   ];
   return (
-    <footer className="relative sm:mt-14 mt-10 bg-[var(--primary)] sm:py-14 py-10">
+    <footer className="relative sm:mt-14 mt-10 bg-[var(--primary)] sm:py-10 py-8">
       <div className="relative ct-container">
         <div className="flex items-start justify-between lg:flex-row flex-col gap-10">
           <div className="w-full flex-1">
@@ -65,7 +65,7 @@ const Footer = () => {
             />
             <ul className="flex flex-wrap list-none sm:gap-5 gap-3 w-full lg:max-w-[290px] ">
               {menuItems.map((item, index) => (
-                <div key={index}>
+                <div key={index} className="flex sm:gap-5 gap-3">
                   <li key={item.name}>
                     <Link
                       href={item.link}
@@ -102,7 +102,7 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="md:mt-[154px] sm:mt-20 mt-12 flex items-center gap-3 justify-between flex-wrap max-[400px]:flex-col max-[400px]:items-start">
+        <div className="md:mt-10 sm:mt-10 mt-7 flex items-center gap-3 justify-between flex-wrap max-[400px]:flex-col max-[400px]:items-start">
           <Link href="/">
             <Image
               src="/img/footer-logo.webp"
