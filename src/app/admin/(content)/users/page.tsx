@@ -31,7 +31,7 @@ const MembersAdminPage = () => {
         setDeletingId(id)
     };
 
-    console.log("deleting Id outside =====>", deletingId)
+    console.log("editing member =====>", editingMember)
 
     const handleConfirmDelete = async () => {
         console.log("DeletingIdv ====>", deletingId)

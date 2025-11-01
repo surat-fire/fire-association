@@ -15,6 +15,7 @@ const MemberModal = ({
     onClose: () => void;
     initialData?: IUser | null;
 }) => {
+    console.log("initialData ===>", initialData)
     const {
         register,
         handleSubmit,
@@ -29,6 +30,8 @@ const MemberModal = ({
             imageFile: undefined,
         },
     });
+
+
 
     const { mutateAsync: createUser, isPending: createLoading } = useCreateUser();
     const { mutateAsync: updateUser, isPending: updateLoading } = useEditUser(
@@ -46,8 +49,11 @@ const MemberModal = ({
                 role: initialData.role,
                 imageFile: undefined,
             });
-            // if the initial image is a URL/path from backend
             setPreview(initialData.imageFile ?? null);
+        }
+        if(!initialData) {
+            console.log("inside initialData")
+            reset()
         }
         if (!isOpen) {
             reset();
