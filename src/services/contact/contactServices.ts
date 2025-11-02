@@ -1,5 +1,7 @@
 import api from "@/lib/axios";
-import { ContactFormData } from "@/lib/validation/contactUsSchema";
+import {
+  ContactFormData,
+} from "@/lib/validation/contactUsSchema";
 
 export interface contactResponse {
   success: boolean;

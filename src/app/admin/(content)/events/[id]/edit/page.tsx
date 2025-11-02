@@ -24,7 +24,7 @@ export default function EditEventPage() {
     return (
         <div className="p-6">
             <h1 className="text-2xl font-bold text-[#490c0c] mb-4">Edit Event</h1>
-            <EventForm initialValues={events.data} onSubmit={handleSubmit} submitLabel="Update Event" />
+            <EventForm initialValues={events.data.event} onSubmit={handleSubmit} submitLabel="Update Event" />
         </div>
     );
 }

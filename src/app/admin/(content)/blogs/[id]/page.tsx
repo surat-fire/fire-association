@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
+import { ArrowLeft, Edit, Calendar, Clock, User, Tag, FileText, Loader2, Eye } from 'lucide-react';
 import { apiRequest } from '@/lib/api';
 
 interface Blog {
@@ -14,6 +15,7 @@ interface Blog {
   status: 'draft' | 'published';
   author: string;
   tags: string[];
+  isFeatured: boolean;
   publishedAt?: string;
   createdAt: string;
   updatedAt: string;
@@ -54,26 +56,12 @@ export default function ViewBlogPage() {
     });
   };
 
-  const handleDelete = async () => {
-    if (!confirm('Are you sure you want to delete this blog? This action cannot be undone.')) {
-      return;
-    }
-
-    try {
-      await apiRequest(`/api/blogs/${params.id}`, { method: 'DELETE' });
-      router.push('/admin/blogs');
-    } catch (error) {
-      console.error('Error deleting blog:', error);
-      alert('Failed to delete blog');
-    }
-  };
-
   if (loading) {
     return (
-      <div className="max-w-4xl mx-auto">
-        <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-red-600"></div>
-          <span className="ml-2 text-gray-600">Loading blog...</span>
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="flex items-center gap-3">
+          <Loader2 className="w-8 h-8 text-brand-800 animate-spin" />
+          <span className="text-lg text-gray-600 font-medium">Loading blog...</span>
         </div>
       </div>
     );
@@ -81,111 +69,149 @@ export default function ViewBlogPage() {
 
   if (!blog) {
     return (
-      <div className="max-w-4xl mx-auto">
-        <div className="text-center py-12">
-          <p className="text-gray-500">Blog not found</p>
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-lg text-gray-500">Blog not found</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="flex justify-between items-start">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Blog Post Details</h1>
-          <p className="mt-1 text-sm text-gray-500">
-            View and manage your blog post
-          </p>
-        </div>
-        <div className="flex space-x-3">
-          <Link
-            href={`/admin/blogs/${blog._id}/edit`}
-            className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors"
-          >
-            Edit
-          </Link>
-          <button
-            onClick={handleDelete}
-            className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition-colors"
-          >
-            Delete
-          </button>
+      <div className="bg-brand-800 shadow-lg">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <Link
+                href="/admin/blogs"
+                className="p-2 text-white/80 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
+              >
+                <ArrowLeft className="w-5 h-5" />
+              </Link>
+              <div>
+                <h1 className="text-2xl md:text-3xl font-bold text-white">Blog Post Details</h1>
+                <p className="text-white/80 text-sm mt-1">
+                  View and manage your blog post
+                </p>
+              </div>
+            </div>
+            <div className="flex gap-3">
+              <Link
+                href={`/admin/blogs/${blog._id}/edit`}
+                className="flex items-center gap-2 px-4 py-2.5 bg-white text-brand-800 rounded-lg hover:bg-white/90 transition-colors font-medium shadow-md"
+              >
+                <Edit className="w-4 h-4" />
+                <span className="hidden sm:inline">Edit</span>
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Blog Content */}
-      <div className="bg-white shadow rounded-lg overflow-hidden">
-        {/* Featured Image */}
-        {blog.featuredImage && (
-          <div className="aspect-w-16 aspect-h-9">
-            <img
-              src={blog.featuredImage}
-              alt={blog.title}
-              className="w-full h-64 object-cover"
-            />
-          </div>
-        )}
-
-        <div className="p-6">
-          {/* Title */}
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">
-            {blog.title}
-          </h1>
-
-          {/* Meta Information */}
-          <div className="flex flex-wrap items-center gap-4 mb-6 text-sm text-gray-500">
-            <div className="flex items-center">
-              <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-              </svg>
-              {blog.author}
-            </div>
-            <div className="flex items-center">
-              <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-              </svg>
-              Created: {formatDate(blog.createdAt)}
-            </div>
-            {blog.publishedAt && (
-              <div className="flex items-center">
-                <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                Published: {formatDate(blog.publishedAt)}
+      {/* Main Content */}
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="space-y-6">
+          {/* Featured Image & Title Card */}
+          <div className="bg-white rounded-xl shadow-md overflow-hidden">
+            {blog.featuredImage && (
+              <div className="relative h-80 w-full">
+                <img
+                  src={blog.featuredImage}
+                  alt={blog.title}
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
               </div>
             )}
-            <div className="flex items-center">
-              <span
-                className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                  blog.status === 'published'
+
+            <div className="p-6 sm:p-8">
+              <div className="flex flex-wrap items-center gap-3 mb-4">
+                <span
+                  className={`inline-flex items-center px-3 py-1.5 rounded-full text-sm font-semibold ${blog.status === 'published'
                     ? 'bg-green-100 text-green-800'
                     : 'bg-yellow-100 text-yellow-800'
-                }`}
-              >
-                {blog.status}
-              </span>
+                    }`}
+                >
+                  {blog.status === 'published' ? (
+                    <Eye className="w-4 h-4 mr-1.5" />
+                  ) : (
+                    <FileText className="w-4 h-4 mr-1.5" />
+                  )}
+                  {blog.status}
+                </span>
+                {blog.isFeatured && (
+                  <span className="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-semibold bg-brand-800 text-white">
+                    ⭐ Featured
+                  </span>
+                )}
+              </div>
+
+              <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-6">
+                {blog.title}
+              </h1>
+
+              {/* Meta Information */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
+                <div className="flex items-center gap-2 text-gray-600">
+                  <div className="p-2 bg-brand-800/10 rounded-lg">
+                    <User className="w-4 h-4 text-brand-800" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-500">Author</p>
+                    <p className="font-medium text-gray-900">{blog.author}</p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2 text-gray-600">
+                  <div className="p-2 bg-brand-800/10 rounded-lg">
+                    <Calendar className="w-4 h-4 text-brand-800" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-500">Created</p>
+                    <p className="font-medium text-gray-900">{new Date(blog.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</p>
+                  </div>
+                </div>
+
+                {blog.publishedAt && (
+                  <div className="flex items-center gap-2 text-gray-600">
+                    <div className="p-2 bg-brand-800/10 rounded-lg">
+                      <Clock className="w-4 h-4 text-brand-800" />
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-500">Published</p>
+                      <p className="font-medium text-gray-900">{new Date(blog.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</p>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
 
-          {/* Excerpt */}
+          {/* Excerpt Card */}
           {blog.excerpt && (
-            <div className="mb-6 p-4 bg-gray-50 rounded-lg">
-              <h3 className="text-sm font-medium text-gray-700 mb-2">Excerpt</h3>
-              <p className="text-gray-600">{blog.excerpt}</p>
+            <div className="bg-white rounded-xl shadow-md p-6">
+              <div className="flex items-center gap-2 mb-3">
+                <FileText className="w-5 h-5 text-brand-800" />
+                <h3 className="text-lg font-semibold text-brand-800">Excerpt</h3>
+              </div>
+              <p className="text-gray-700 leading-relaxed">{blog.excerpt}</p>
             </div>
           )}
 
-          {/* Tags */}
+          {/* Tags Card */}
           {blog.tags.length > 0 && (
-            <div className="mb-6">
-              <h3 className="text-sm font-medium text-gray-700 mb-2">Tags</h3>
+            <div className="bg-white rounded-xl shadow-md p-6">
+              <div className="flex items-center gap-2 mb-4">
+                <Tag className="w-5 h-5 text-brand-800" />
+                <h3 className="text-lg font-semibold text-brand-800">Tags</h3>
+              </div>
               <div className="flex flex-wrap gap-2">
                 {blog.tags.map((tag, index) => (
                   <span
                     key={index}
-                    className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800"
+                    className="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium bg-brand-800 text-white"
                   >
                     {tag}
                   </span>
@@ -194,59 +220,38 @@ export default function ViewBlogPage() {
             </div>
           )}
 
-          {/* Content */}
-          <div className="prose max-w-none">
-            <h3 className="text-sm font-medium text-gray-700 mb-4">Content</h3>
+          {/* Content Card */}
+          <div className="bg-white rounded-xl shadow-md p-6 sm:p-8">
+            <div className="flex items-center gap-2 mb-6">
+              <FileText className="w-5 h-5 text-brand-800" />
+              <h3 className="text-lg font-semibold text-brand-800">Content</h3>
+            </div>
             <div
-              className="text-gray-700 leading-relaxed"
+              className="prose prose-lg max-w-none prose-headings:text-gray-900 prose-p:text-gray-700 prose-a:text-brand-800 prose-strong:text-gray-900 prose-ul:text-gray-700 prose-ol:text-gray-700"
               dangerouslySetInnerHTML={{ __html: blog.content }}
             />
           </div>
-        </div>
-      </div>
 
-      {/* Additional Information */}
-      <div className="bg-white shadow rounded-lg p-6">
-        <h3 className="text-lg font-medium text-gray-900 mb-4">Blog Information</h3>
-        <dl className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2">
-          <div>
-            <dt className="text-sm font-medium text-gray-500">Last Updated</dt>
-            <dd className="mt-1 text-sm text-gray-900">{formatDate(blog.updatedAt)}</dd>
+          {/* Blog Information Card */}
+          <div className="bg-white rounded-xl shadow-md p-6">
+            <h3 className="text-lg font-semibold text-brand-800 mb-6">Blog Information</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="p-4 bg-gray-50 rounded-lg">
+                <p className="text-xs text-gray-500 mb-1">Last Updated</p>
+                <p className="text-sm font-medium text-gray-900">{formatDate(blog.updatedAt)}</p>
+              </div>
+              <div className="p-4 bg-gray-50 rounded-lg">
+                <p className="text-xs text-gray-500 mb-1">Blog ID</p>
+                <p className="text-sm font-medium text-gray-900 font-mono truncate">{blog._id}</p>
+              </div>
+              <div className="p-4 bg-gray-50 rounded-lg">
+                <p className="text-xs text-gray-500 mb-1">Word Count</p>
+                <p className="text-sm font-medium text-gray-900">
+                  {blog.content.replace(/<[^>]*>/g, '').split(/\s+/).filter(word => word.length > 0).length} words
+                </p>
+              </div>
+            </div>
           </div>
-          <div>
-            <dt className="text-sm font-medium text-gray-500">Blog ID</dt>
-            <dd className="mt-1 text-sm text-gray-900 font-mono">{blog._id}</dd>
-          </div>
-          <div>
-            <dt className="text-sm font-medium text-gray-500">Word Count</dt>
-            <dd className="mt-1 text-sm text-gray-900">
-              {blog.content.replace(/<[^>]*>/g, '').split(/\s+/).length} words
-            </dd>
-          </div>
-        </dl>
-      </div>
-
-      {/* Actions */}
-      <div className="flex justify-between">
-        <Link
-          href="/admin/blogs"
-          className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-        >
-          <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-          </svg>
-          Back to Blogs
-        </Link>
-        <div className="flex space-x-3">
-          <Link
-            href={`/admin/blogs/${blog._id}/edit`}
-            className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          >
-            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-            </svg>
-            Edit Blog
-          </Link>
         </div>
       </div>
     </div>

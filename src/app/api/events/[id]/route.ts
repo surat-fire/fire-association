@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import Event from "@/models/Event";
 import { saveFile, deleteFile } from "@/lib/fileHelper";
 import connectDB from "@/lib/mongodb";
+import EventRegistration from "@/models/EventRegistration";
 
 export async function GET(
   req: NextRequest,
@@ -11,12 +12,16 @@ export async function GET(
     await connectDB();
     const { id } = await params;
     const event = await Event.findById(id);
+    const registration = await EventRegistration.find({ event: id });
     if (!event)
       return NextResponse.json(
         { success: false, message: "Event not found" },
         { status: 404 }
       );
-    return NextResponse.json({ success: true, data: event });
+    return NextResponse.json({
+      success: true,
+      data: { event, registration },
+    });
   } catch (error: any) {
     console.error("Error fetching event:", error);
     return NextResponse.json(
@@ -57,12 +62,12 @@ export async function PUT(
     // Handle image
     let imagePath = existing.image;
     const imageFile = formData.get("image") as File | null;
-    console.log("imageFile ======>", imageFile)
+    console.log("imageFile ======>", imageFile);
     if (imageFile && imageFile.size > 0) {
-      console.log("in condition")
+      console.log("in condition");
       await deleteFile(existing.image);
       imagePath = await saveFile(imageFile, "events");
-      console.log("imagePath ======>", imagePath)
+      console.log("imagePath ======>", imagePath);
     }
 
     // Handle safety checklist doc

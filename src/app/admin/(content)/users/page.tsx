@@ -7,6 +7,7 @@ import useDeleteUser from '@/hooks/users/useDeleteUser';
 import useGetUsers from '@/hooks/users/useGetUsers';
 import { IUser } from '@/models/User';
 import React, { useState } from 'react'
+import { UserPlus, Edit, Trash2, Users, Mail, Phone } from 'lucide-react';
 
 const MembersAdminPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -31,10 +32,7 @@ const MembersAdminPage = () => {
         setDeletingId(id)
     };
 
-    console.log("editing member =====>", editingMember)
-
     const handleConfirmDelete = async () => {
-        console.log("DeletingIdv ====>", deletingId)
         if (!deletingId) return
         const deletedData = await deleteUser(deletingId)
         if (deletedData.success) {
@@ -44,95 +42,133 @@ const MembersAdminPage = () => {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 p-4 sm:p-8">
-            <div className="mx-auto max-w-5xl">
-                <div className="mb-6 flex items-center justify-between">
-                    <h1 className="text-2xl font-semibold">Members</h1>
-                    <div className="flex items-center gap-3">
+        <div className="min-h-screen bg-gray-50">
+            {/* Header */}
+            <div className="bg-brand-800 shadow-lg">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                        <div className="flex items-center gap-3">
+                            <div className="p-3 bg-white/10 rounded-lg">
+                                <Users className="w-6 h-6 text-white" />
+                            </div>
+                            <div>
+                                <h1 className="text-2xl md:text-3xl font-bold text-white">Members</h1>
+                                <p className="text-white/80 text-sm mt-1">
+                                    Manage your organization members
+                                </p>
+                            </div>
+                        </div>
                         <button
                             onClick={openAdd}
-                            className="hidden items-center gap-2 rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white md:flex"
+                            className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white text-brand-800 rounded-lg hover:bg-white/90 transition-colors font-medium shadow-md"
                         >
-                            + Add member
-                        </button>
-
-                        {/* small screen floating add button */}
-                        <button
-                            onClick={openAdd}
-                            className="md:hidden rounded-full bg-indigo-600 p-3 text-white"
-                            aria-label="Add member"
-                        >
-                            +
+                            <UserPlus className="w-5 h-5" />
+                            <span>Add Member</span>
                         </button>
                     </div>
                 </div>
+            </div>
 
-                <div className="rounded-lg bg-white p-4 shadow sm:p-6">
+            {/* Main Content */}
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                <div className="bg-white rounded-xl shadow-md overflow-hidden">
+                    {/* Stats Bar */}
+                    <div className="bg-gray-50 px-6 py-4 border-b border-gray-200">
+                        <div className="flex items-center justify-between">
+                            <p className="text-sm text-gray-600">
+                                Total Members: <span className="font-semibold text-brand-800">{members?.length || 0}</span>
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* Table */}
                     <div className="overflow-x-auto">
-                        <table className="w-full table-auto">
-                            <thead>
-                                <tr className="text-left text-sm text-gray-500">
-                                    <th className="py-2">Member</th>
-                                    <th className="py-2">Role</th>
-                                    <th className="py-2">Actions</th>
+                        <table className="w-full">
+                            <thead className="bg-gray-50 border-b border-gray-200">
+                                <tr>
+                                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        Member
+                                    </th>
+                                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        Role
+                                    </th>
+                                    <th className="px-6 py-4 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        Actions
+                                    </th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y">
-                                {members.map((m, index) => (
-                                    <tr key={index} className="align-top">
-                                        <td className="py-4">
-                                            <div className="flex items-center gap-3">
-                                                <div className="h-12 w-12 flex-shrink-0 overflow-hidden rounded-full bg-gray-200">
-                                                    {m.imageFile ? (
-                                                        // eslint-disable-next-line @next/next/no-img-element
-                                                        <img src={m.imageFile} alt={m.name} className="h-full w-full object-cover" />
-                                                    ) : (
-                                                        <div className="flex h-full w-full items-center justify-center text-sm text-gray-600">{m.name}</div>
-                                                    )}
-                                                </div>
-                                                <div>
-                                                    <div className="font-medium">{m.name}</div>
-                                                </div>
-                                            </div>
-                                        </td>
-
-                                        <td className="py-4">
-                                            <div className="text-sm text-gray-700">{m.role}</div>
-                                        </td>
-
-                                        <td className="py-4">
-                                            <div className="flex gap-2">
-                                                <button
-                                                    onClick={() => openEdit(m)}
-                                                    className="rounded-md border px-3 py-1 text-sm"
-                                                >
-                                                    Edit
-                                                </button>
-                                                <button
-                                                    onClick={() => handleDelete(m._id as string)}
-                                                    className="rounded-md border px-3 py-1 text-sm text-red-600"
-                                                >
-                                                    Delete
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))}
-
-                                {isLoading && (
+                            <tbody className="divide-y divide-gray-200">
+                                {isLoading ? (
                                     <tr>
-                                        <td colSpan={3}>
+                                        <td colSpan={4} className="py-12">
                                             <Loader />
                                         </td>
                                     </tr>
-                                )}
-
-                                {members.length === 0 && (
+                                ) : members?.length === 0 ? (
                                     <tr>
-                                        <td colSpan={3} className="py-8 text-center text-sm text-gray-500">
-                                            No members yet. Click Add member to create one.
+                                        <td colSpan={4} className="py-12">
+                                            <div className="text-center">
+                                                <Users className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+                                                <p className="text-gray-500 text-sm mb-2">No members yet</p>
+                                                <button
+                                                    onClick={openAdd}
+                                                    className="text-brand-800 text-sm font-medium hover:underline"
+                                                >
+                                                    Add your first member
+                                                </button>
+                                            </div>
                                         </td>
                                     </tr>
+                                ) : (
+                                    members?.map((m, index) => (
+                                        <tr key={index} className="hover:bg-gray-50 transition-colors">
+                                            <td className="px-6 py-4">
+                                                <div className="flex items-center gap-4">
+                                                    <div className="h-12 w-12 flex-shrink-0 overflow-hidden rounded-full bg-brand-800/10 border-2 border-brand-800/20">
+                                                        {m.imageFile ? (
+                                                            <img
+                                                                src={m.imageFile}
+                                                                alt={m.name}
+                                                                className="h-full w-full object-cover"
+                                                            />
+                                                        ) : (
+                                                            <div className="flex h-full w-full items-center justify-center text-sm font-semibold text-brand-800">
+                                                                {m.name.charAt(0).toUpperCase()}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                    <div>
+                                                        <div className="font-semibold text-gray-900">{m.name}</div>
+                                                    </div>
+                                                </div>
+                                            </td>
+
+                                            <td className="px-6 py-4">
+                                                <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-brand-800/10 text-brand-800">
+                                                    {m.role}
+                                                </span>
+                                            </td>
+
+                                            <td className="px-6 py-4">
+                                                <div className="flex justify-end gap-2">
+                                                    <button
+                                                        onClick={() => openEdit(m)}
+                                                        className="inline-flex items-center gap-1.5 px-3 py-1.5 border-2 border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                                                    >
+                                                        <Edit className="w-4 h-4" />
+                                                        <span className="hidden sm:inline">Edit</span>
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handleDelete(m._id as string)}
+                                                        className="inline-flex items-center gap-1.5 px-3 py-1.5 border-2 border-red-300 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50 transition-colors"
+                                                    >
+                                                        <Trash2 className="w-4 h-4" />
+                                                        <span className="hidden sm:inline">Delete</span>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))
                                 )}
                             </tbody>
                         </table>
@@ -140,13 +176,31 @@ const MembersAdminPage = () => {
                 </div>
             </div>
 
+            {/* Floating Add Button for Mobile */}
+            <button
+                onClick={openAdd}
+                className="fixed bottom-6 right-6 md:hidden flex items-center justify-center w-14 h-14 bg-brand-800 text-white rounded-full shadow-lg hover:bg-brand-800/90 transition-all hover:scale-110"
+                aria-label="Add member"
+            >
+                <UserPlus className="w-6 h-6" />
+            </button>
+
             <MemberModal
                 isOpen={isModalOpen}
                 onClose={() => { setIsModalOpen(false); setEditingMember(null) }}
                 initialData={editingMember}
             />
 
-            <ConfirmDialog open={isDeleting} title='Delete User' message='Are you sure you want to delete this user ?' cancelText='Cancel' confirmText='Confirm' isLoading={isPending} onCancel={() => { setIsDeleting(false); setDeletingId("") }} onConfirm={handleConfirmDelete} />
+            <ConfirmDialog
+                open={isDeleting}
+                title='Delete Member'
+                message='Are you sure you want to delete this member? This action cannot be undone.'
+                cancelText='Cancel'
+                confirmText='Delete'
+                isLoading={isPending}
+                onCancel={() => { setIsDeleting(false); setDeletingId("") }}
+                onConfirm={handleConfirmDelete}
+            />
         </div>
     );
 }

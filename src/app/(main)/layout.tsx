@@ -12,7 +12,7 @@ export default async function RootLayout({
         <>
             <Navbar />
             {children}
-            <CTASection label="Contact" title="Get Involved" description="Tell us your interest and we'll reach out." buttonText="Contact Us" buttonLink="#" />
+            <CTASection label="Contact" title="Get Involved" description="Tell us your interest and we'll reach out." buttonText="Contact Us" buttonLink="/contact" />
             <Footer />
         </>
     );

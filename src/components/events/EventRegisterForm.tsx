@@ -5,8 +5,13 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import React from 'react'
 import { useForm } from 'react-hook-form';
 import { Button } from '../ui/Button';
+import useEventRegistration from '@/hooks/users/useCreateRegisterEvent';
+import { toast } from 'react-toastify';
+import Loader from '../ui/Loader';
+import { useParams } from 'next/navigation';
 
 const EventRegisterForm = () => {
+    const { id } = useParams()
     const {
         register,
         handleSubmit,
@@ -22,9 +27,18 @@ const EventRegisterForm = () => {
         },
     });
 
-    const onSubmit = (data: EventFormData) => {
+    const { mutateAsync, isPending } = useEventRegistration()
+
+    const onSubmit = async (data: EventFormData) => {
         console.log("Registration data:", data);
-        alert("Registration submitted successfully!");
+        const payload = {
+            ...data,
+            event: id as string
+        }
+        const eventRegisterData = await mutateAsync(payload)
+        if (eventRegisterData.success) {
+            toast.success("Registration submitted successfully!")
+        }
         reset();
     };
 
@@ -107,7 +121,7 @@ const EventRegisterForm = () => {
 
                 {/* Submit Button */}
                 <Button type='submit' className='sm:py-4 sm:text-base mt-5'>
-                    Register Now
+                    {isPending ? <Loader /> : "Register Now"}
                 </Button>
             </form>
         </div>

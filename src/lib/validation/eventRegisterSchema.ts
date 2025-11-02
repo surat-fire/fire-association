@@ -8,6 +8,7 @@ export const EventFormSchema = z.object({
     .min(10, "Phone number must be at least 10 digits")
     .regex(/^[0-9+\-\s()]*$/, "Invalid phone number"),
   email: z.string().email("Invalid email address"),
+  event: z.string().optional(),
 });
 
 export type EventFormData = z.infer<typeof EventFormSchema>;

@@ -1,6 +1,10 @@
+import { EventFormData } from "@/lib/validation/eventRegisterSchema";
+import { IEventRegistration } from "@/models/EventRegistration";
+
 export interface AgendaItem {
   time: string;
   title: string;
+  _id: string;
 }
 
 export interface IEventResponse {
@@ -10,7 +14,10 @@ export interface IEventResponse {
 }
 
 export interface IEventSpecificResponse {
-  data: IEvent;
+  data: {
+    event: IEvent;
+    registration: IEventRegistration[];
+  };
   success: boolean;
   message: string;
 }

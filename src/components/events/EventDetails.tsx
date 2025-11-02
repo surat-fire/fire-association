@@ -11,7 +11,7 @@ const EventDetails = () => {
     const { id } = useParams()
     const { data: events, isLoading } = useGetEvent(id as string)
     if (isLoading) return <Loader />
-    const event = events?.data
+    const event = events?.data.event
     return (
         <section className='relative w-full sm:pt-[60px] pt-10'>
             <div className='ct-container'>

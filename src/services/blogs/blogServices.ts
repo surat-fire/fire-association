@@ -50,7 +50,11 @@ export const deleteBlog = async (id: string): Promise<deleteBlogResponse> => {
 };
 
 export const fetchBlogs = async (): Promise<blogsResponse> => {
-  const response = await api.get("/api/blogs");
+  const response = await api.get("/api/blogs", {
+    params: {
+      status: "published",
+    },
+  });
   return response.data;
 };
 
