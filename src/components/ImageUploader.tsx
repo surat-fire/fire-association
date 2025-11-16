@@ -3,6 +3,7 @@
 import React, { useState, useRef } from 'react';
 import { Button } from '@/components/ui/Button';
 import { cn } from '@/lib/utils';
+import Image from 'next/image';
 
 interface ImageUploaderProps {
   value: string;
@@ -109,7 +110,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
         
         {value && (
           <div className="mt-2">
-            <img
+            <Image
               src={value}
               alt="Event preview"
               className="w-full h-48 object-cover rounded-lg border border-gray-200"

@@ -1,4 +1,5 @@
 // components/FeatureSection.js
+import Image from "next/image";
 import React from "react";
 
 interface IProps {
@@ -33,7 +34,7 @@ const FeatureSection = ({ features }: IProps) => {
               <div className="mb-8 flex justify-center">
                 <div className="w-24 h-24 flex items-center justify-center">
                   {feature.icon ? (
-                    <img
+                    <Image
                       src={feature.icon}
                       alt={feature.title}
                       className="w-full h-full object-contain"

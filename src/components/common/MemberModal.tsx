@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { X, Upload, User, Briefcase, Loader2, Image as ImageIcon } from "lucide-react";
+import Image from "next/image";
 
 const MemberModal = ({
     isOpen,
@@ -185,7 +186,7 @@ const MemberModal = ({
                         {preview ? (
                             <div className="relative group">
                                 <div className="relative aspect-square w-32 mx-auto rounded-xl overflow-hidden border-4 border-brand-800/20">
-                                    <img
+                                    <Image
                                         src={preview}
                                         alt="preview"
                                         className="w-full h-full object-cover"

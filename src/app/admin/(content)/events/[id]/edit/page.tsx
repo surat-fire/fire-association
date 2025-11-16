@@ -8,7 +8,7 @@ import useGetEvent from "@/hooks/events/useGetEventById";
 export default function EditEventPage() {
     const router = useRouter();
     const { id } = useParams()
-    const { data: events, isLoading, error } = useGetEvent(id as string)
+    const { data: events, isLoading } = useGetEvent(id as string)
     const { mutateAsync } = useEditEvent(id as string)
 
     const handleSubmit = async (formData: FormData) => {

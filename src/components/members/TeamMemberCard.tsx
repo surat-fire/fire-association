@@ -1,18 +1,17 @@
 "use client";
 
+import React from "react";
 import { IUser } from "@/models/User";
 import Image from "next/image";
-import { useState } from "react";
 
-const TeamMemberCard = ({ member, key }: { member: IUser; key: string }) => {
-  const [isHovered, setIsHovered] = useState(false);
+const TeamMemberCard = ({ member }: { member: IUser; key: string }) => {
 
   return (
     <div
-      key={key}
-      className="w-full sm:h-[430px] h-[320px] overflow-hidden sm:rounded-[20px] rounded-2xl relative [&:hover_.img-overlay]:opacity-100 [&:hover_.image-content]:translate-y-0"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      key={member.name}
+      className="w-full sm:h-[430px] h-[320px] overflow-hidden sm:rounded-[20px] rounded-2xl relative [&:hover_.img-overlay]:opacity-100 [&:hover_.image-content]:translate-y-0 cursor-pointer"
+      // onMouseEnter={() => setIsHovered(true)}
+      // onMouseLeave={() => setIsHovered(false)}
       style={{ aspectRatio: "3/4" }}
     >
       <Image

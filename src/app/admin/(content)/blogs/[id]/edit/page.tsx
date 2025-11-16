@@ -8,6 +8,7 @@ import { apiRequest, apiRequestWithFormData } from '@/lib/api';
 
 const ReactQuill = dynamic(() => import('react-quill-new'), { ssr: false });
 import 'react-quill-new/dist/quill.snow.css';
+import Image from 'next/image';
 
 interface Blog {
   _id: string;
@@ -254,7 +255,7 @@ export default function EditBlogPage() {
             
             {formData.featuredImage ? (
               <div className="relative rounded-lg overflow-hidden border-2 border-gray-200">
-                <img
+                <Image
                   src={formData.featuredImage}
                   alt="Featured"
                   className="w-full h-64 object-cover"

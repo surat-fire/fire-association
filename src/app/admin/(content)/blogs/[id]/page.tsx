@@ -5,6 +5,7 @@ import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, Edit, Calendar, Clock, User, Tag, FileText, Loader2, Eye } from 'lucide-react';
 import { apiRequest } from '@/lib/api';
+import Image from 'next/image';
 
 interface Blog {
   _id: string;
@@ -117,7 +118,7 @@ export default function ViewBlogPage() {
           <div className="bg-white rounded-xl shadow-md overflow-hidden">
             {blog.featuredImage && (
               <div className="relative h-80 w-full">
-                <img
+                <Image
                   src={blog.featuredImage}
                   alt={blog.title}
                   className="w-full h-full object-cover"

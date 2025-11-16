@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -24,7 +24,7 @@ export default function AdminSidebar({ sidebarOpen, setSidebarOpen }: AdminSideb
     <>
       {/* Mobile sidebar overlay */}
       {sidebarOpen && (
-        <div 
+        <div
           className="fixed inset-0 z-40 lg:hidden"
           onClick={() => setSidebarOpen(false)}
         >
@@ -67,17 +67,15 @@ export default function AdminSidebar({ sidebarOpen, setSidebarOpen }: AdminSideb
                   <Link
                     key={item.name}
                     href={item.href}
-                    className={`${
-                      isActive
+                    className={`${isActive
                         ? 'bg-red-100 text-red-900'
                         : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
-                    } group flex items-center px-2 py-2 text-base font-medium rounded-md`}
+                      } group flex items-center px-2 py-2 text-base font-medium rounded-md`}
                     onClick={() => setSidebarOpen(false)}
                   >
                     <svg
-                      className={`${
-                        isActive ? 'text-red-500' : 'text-gray-400 group-hover:text-gray-500'
-                      } mr-4 flex-shrink-0 h-6 w-6`}
+                      className={`${isActive ? 'text-red-500' : 'text-gray-400 group-hover:text-gray-500'
+                        } mr-4 flex-shrink-0 h-6 w-6`}
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -117,16 +115,14 @@ export default function AdminSidebar({ sidebarOpen, setSidebarOpen }: AdminSideb
                     <Link
                       key={item.name}
                       href={item.href}
-                      className={`${
-                        isActive
+                      className={`${isActive
                           ? 'bg-red-100 text-red-900'
                           : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
-                      } group flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors duration-150`}
+                        } group flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors duration-150`}
                     >
                       <svg
-                        className={`${
-                          isActive ? 'text-red-500' : 'text-gray-400 group-hover:text-gray-500'
-                        } mr-3 flex-shrink-0 h-6 w-6`}
+                        className={`${isActive ? 'text-red-500' : 'text-gray-400 group-hover:text-gray-500'
+                          } mr-3 flex-shrink-0 h-6 w-6`}
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"

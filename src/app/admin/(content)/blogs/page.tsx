@@ -2,11 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { apiRequest } from '@/lib/api';
 import useDeleteBlog from '@/hooks/blogs/useDeleteBlog';
 import ConfirmDialog from '@/components/common/ConfirmDialog';
 import { toast } from 'react-toastify';
+import Image from 'next/image';
 
 interface Blog {
   _id: string;
@@ -199,7 +199,7 @@ export default function BlogsPage() {
                 {/* Featured Image */}
                 <div className="relative h-48 bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden">
                   {blog.featuredImage ? (
-                    <img
+                    <Image
                       src={blog.featuredImage}
                       alt={blog.title}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"

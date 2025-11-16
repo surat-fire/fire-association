@@ -1,8 +1,8 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import SectionTitle from "../common/SectionTitle";
 
 const faqs = [
   {
@@ -56,7 +56,7 @@ const FAQSection = () => {
         <div className="w-full md:px-0 px-5">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="w-full lg:h-[700px] md:h-[650px] h-auto md:rounded-e-[20px] md:rounded-s-[0] rounded-2xl overflow-hidden">
-              <img
+              <Image
                 src="/img/event-img.webp"
                 alt="Firefighter in action"
                 className="w-full h-full object-cover"

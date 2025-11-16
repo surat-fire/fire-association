@@ -1,19 +1,14 @@
+"use client"
+
 import React from "react";
 import SectionTitle from "../common/SectionTitle";
 import Image from "next/image";
+import useGetUsers from "@/hooks/users/useGetUsers";
 
 const FounderProfile = () => {
-  interface TeamMember {
-    name: string;
-    role: string;
-    image: string;
-  }
 
-  const teamMembers: TeamMember[] = [
-    { name: "John Doe", role: "Founder & CEO", image: "/img/profile-img.webp" },
-    { name: "Jane Smith", role: "CTO", image: "/img/profile-img.webp" },
-    { name: "Alice Johnson", role: "COO", image: "/img/profile-img.webp" },
-  ];
+  const { data: teamMembers } = useGetUsers()
+
   return (
     <>
       <section className="relative w-full sm:py-14 py-10">
@@ -29,7 +24,7 @@ const FounderProfile = () => {
               <div key={index} className="w-full">
                 <div className="w-full md:h-[650px] sm:h-[500px] h-[300px] overflow-hidden sm:rounded-[20px] rounded-2xl relative [&:hover_.img-overlay]:opacity-100 [&:hover_.image-content]:translate-y-0">
                   <Image
-                    src={member.image}
+                    src={member.imageFile}
                     width={500}
                     height={600}
                     alt={member.name}

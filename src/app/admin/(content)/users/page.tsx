@@ -7,7 +7,8 @@ import useDeleteUser from '@/hooks/users/useDeleteUser';
 import useGetUsers from '@/hooks/users/useGetUsers';
 import { IUser } from '@/models/User';
 import React, { useState } from 'react'
-import { UserPlus, Edit, Trash2, Users, Mail, Phone } from 'lucide-react';
+import { UserPlus, Edit, Trash2, Users } from 'lucide-react';
+import Image from 'next/image';
 
 const MembersAdminPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -126,7 +127,7 @@ const MembersAdminPage = () => {
                                                 <div className="flex items-center gap-4">
                                                     <div className="h-12 w-12 flex-shrink-0 overflow-hidden rounded-full bg-brand-800/10 border-2 border-brand-800/20">
                                                         {m.imageFile ? (
-                                                            <img
+                                                            <Image
                                                                 src={m.imageFile}
                                                                 alt={m.name}
                                                                 className="h-full w-full object-cover"

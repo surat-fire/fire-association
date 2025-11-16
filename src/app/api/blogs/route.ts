@@ -13,7 +13,6 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(searchParams.get('limit') || '10');
     const status = searchParams.get('status');
     const search = searchParams.get('search');
-    const isPublic = searchParams.get('isPublic') === 'true'
     
     const skip = (page - 1) * limit;
     
