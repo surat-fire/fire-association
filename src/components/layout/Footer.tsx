@@ -21,13 +21,12 @@ const Footer = () => {
   }, []);
 
   const menuItems = [
-    { name: "Home", link: "#" },
-    { name: "About", link: "#" },
-    { name: "Event", link: "#" },
-    { name: "Blog", link: "#" },
-    { name: "Member", link: "#" },
-    { name: "FAQ", link: "#" },
-    { name: "Privacy Policy", link: "#" },
+    { name: "Home", link: "/" },
+    { name: "About", link: "/about" },
+    { name: "Event", link: "/events" },
+    { name: "Blog", link: "/blogs" },
+    { name: "Member", link: "/members" },
+    { name: "Privacy Policy", link: "/privacy-policy" },
   ];
 
   const infoItems: InfoItem[] = [
@@ -120,13 +119,13 @@ const Footer = () => {
         <div className="mt-5 w-full sm:rounded-[20px] rounded-2xl overflow-hidden bg-[url('/img/footer-bg.webp')] bg-cover bg-bottom bg-no-repeat">
           <div className="w-full flex items-center justify-between gap-5 sm:h-[200px] h-[150px] sm:p-10 p-6">
             <Link
-              href="#"
+              href="/terms-and-condition"
               className="text-base font-medium hover:text-opacity-50 text-white"
             >
               Terms & Condition
             </Link>
             <Link
-              href="#"
+              href="/terms-and-condition"
               className="w-12 h-12 flex items-center justify-center bg-transparent hover:bg-[rgba(255,255,255,0.1)] rounded-full md:mr-10"
             >
               <GoArrowUpRight className="w-6 h-6 text-white" />
