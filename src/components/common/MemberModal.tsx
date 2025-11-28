@@ -50,8 +50,12 @@ const MemberModal = ({
             });
             setPreview(initialData.imageFile ?? null);
         }
-        if (!initialData) {
-            reset();
+        if (isOpen && !initialData) {
+            reset({
+                name: "",
+                role: "",
+                imageFile: undefined,
+            });
         }
         if (!isOpen) {
             reset();
