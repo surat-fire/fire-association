@@ -113,6 +113,8 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
             <Image
               src={value}
               alt="Event preview"
+              width={100}
+              height={192}
               className="w-full h-48 object-cover rounded-lg border border-gray-200"
             />
             <p className="text-xs text-gray-500 mt-1">

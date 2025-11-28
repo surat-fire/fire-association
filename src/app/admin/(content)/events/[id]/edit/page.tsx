@@ -4,6 +4,7 @@ import { useParams, useRouter } from "next/navigation";
 import EventForm from "@/components/EventForm";
 import useEditEvent from "@/hooks/events/useEditEvent";
 import useGetEvent from "@/hooks/events/useGetEventById";
+import Loader from "@/components/ui/Loader";
 
 export default function EditEventPage() {
     const router = useRouter();
@@ -14,11 +15,11 @@ export default function EditEventPage() {
     const handleSubmit = async (formData: FormData) => {
         const data = await mutateAsync(formData);
         if (data) {
-            router.push("/admin/events")
+            // router.push("/admin/events")
         }
     };
 
-    if (isLoading) return <p className="p-6 text-gray-600">Loading event...</p>;
+    if (isLoading) return <Loader />;
     if (!events) return <p className="p-6 text-red-600">Event not found.</p>;
 
     return (

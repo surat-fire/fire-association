@@ -47,7 +47,7 @@ const EventForm: React.FC<Props> = ({ initialValues, onSubmit, submitLabel }) =>
   });
 
   const [imagePreview, setImagePreview] = useState<string | null>(
-    initialValues?.image ? `/upload/events/${initialValues.image}` : null
+    initialValues?.image ? initialValues.image : null
   );
   const [safetyFileName, setSafetyFileName] = useState<string>(
     initialValues?.safetyChecklistUrl
@@ -55,9 +55,15 @@ const EventForm: React.FC<Props> = ({ initialValues, onSubmit, submitLabel }) =>
       : ""
   );
 
+  const [selectedImageFile, setSelectedImageFile] = useState<File | null>(null);
+  const [selectedChecklistFile, setSelectedChecklistFile] = useState<File | null>(null);
+
   const submitHandler = async (values: EventFormValues) => {
     const fd = new FormData();
     Object.entries(values).forEach(([key, val]) => {
+      // Skip image and safetyChecklist as they are handled separately
+      if (key === "image" || key === "safetyChecklist") return;
+
       if (Array.isArray(val)) {
         fd.append(key, JSON.stringify(val));
       } else if (val !== undefined && val !== null) {
@@ -65,11 +71,10 @@ const EventForm: React.FC<Props> = ({ initialValues, onSubmit, submitLabel }) =>
       }
     });
 
-    const imageFile = (document.getElementById("image") as HTMLInputElement)?.files?.[0];
-    if (imageFile) fd.append("image", imageFile);
+    if (selectedImageFile) fd.append("image", selectedImageFile);
+    if (selectedChecklistFile) fd.append("safetyChecklist", selectedChecklistFile);
 
-    const checklistFile = (document.getElementById("safetyChecklist") as HTMLInputElement)?.files?.[0];
-    if (checklistFile) fd.append("safetyChecklist", checklistFile);
+    console.log("Submitting FormData:", Array.from(fd.entries()));
 
     await onSubmit(fd);
   };
@@ -300,13 +305,15 @@ const EventForm: React.FC<Props> = ({ initialValues, onSubmit, submitLabel }) =>
                   <span className="text-xs text-gray-400 block mt-1">PNG, JPG, GIF up to 10MB</span>
                 </div>
                 <input
-                  id="image"
                   type="file"
                   accept="image/*"
                   className="hidden"
                   onChange={(e) => {
                     const file = e.target.files?.[0];
-                    if (file) setImagePreview(URL.createObjectURL(file));
+                    if (file) {
+                      setImagePreview(URL.createObjectURL(file));
+                      setSelectedImageFile(file);
+                    }
                   }}
                 />
               </label>
@@ -342,13 +349,15 @@ const EventForm: React.FC<Props> = ({ initialValues, onSubmit, submitLabel }) =>
                   <span className="text-xs text-gray-400 block mt-1">PDF, DOC, DOCX, XLS, XLSX, TXT</span>
                 </div>
                 <input
-                  id="safetyChecklist"
                   type="file"
                   accept=".pdf,.doc,.docx,.xls,.xlsx,.txt"
                   className="hidden"
                   onChange={(e) => {
                     const file = e.target.files?.[0];
-                    if (file) setSafetyFileName(file.name); // show selected file name
+                    if (file) {
+                      setSafetyFileName(file.name); // show selected file name
+                      setSelectedChecklistFile(file);
+                    }
                   }}
                 />
               </label>

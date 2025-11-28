@@ -5,6 +5,7 @@ import SectionTitle from "../common/SectionTitle";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { formatDate } from "@/lib/utils";
 import { useRouter } from "next/navigation";
+import Loader from "../ui/Loader";
 
 interface IProps {
   title?: string
@@ -12,6 +13,7 @@ interface IProps {
   created_at?: string
   image?: string
   id?: string
+  isLoading?: boolean
 }
 
 const HomeFeaturedBlog = ({
@@ -19,9 +21,11 @@ const HomeFeaturedBlog = ({
   tag = "News",
   created_at = "FEB 5, 2050",
   image = "/img/about-hero-bg.webp",
-  id = "12345456654"
+  id = "12345456654",
+  isLoading = false
 }: IProps) => {
   const router = useRouter()
+  if (isLoading) return <Loader />
   return (
     <>
       <section className="w-full relative sm:py-14 py-10">

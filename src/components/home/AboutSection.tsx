@@ -3,7 +3,7 @@ import Image from "next/image";
 import SectionTitle from "../common/SectionTitle";
 
 type AboutCard = {
-  type?: "image"; // If type is "image", it will render differently
+  type?: "image";
   label?: string;
   title?: string;
   paragraphs?: string[];
@@ -59,7 +59,8 @@ const AboutSection: React.FC = () => {
                 <Image
                   src={item.image ?? ""}
                   alt={item.alt ?? "About image"}
-                  fill
+                  height={100}
+                  width={100}
                   className="object-cover h-full w-full transition-all duration-300"
                 />
               </div>

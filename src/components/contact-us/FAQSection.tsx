@@ -59,6 +59,8 @@ const FAQSection = () => {
               <Image
                 src="/img/event-img.webp"
                 alt="Firefighter in action"
+                width={100}
+                height={100}
                 className="w-full h-full object-cover"
               />
             </div>
@@ -134,22 +136,6 @@ const FAQSection = () => {
                         </div>
 
                         {/* Optional SVG Icon */}
-                                                    {/* 
-                            <svg
-                                className={`w-5 h-5 text-[#490c0c] opacity-60 transition-transform flex-shrink-0 mt-1 
-                                ${openId === faq.id ? "rotate-180" : ""}`}
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M19 9l-7 7-7-7"
-                                />
-                            </svg> 
-                            */}
                       </button>
                     </div>
                   ))}

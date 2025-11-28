@@ -188,6 +188,8 @@ const MemberModal = ({
                                 <div className="relative aspect-square w-32 mx-auto rounded-xl overflow-hidden border-4 border-brand-800/20">
                                     <Image
                                         src={preview}
+                                        width={100}
+                                        height={100}
                                         alt="preview"
                                         className="w-full h-full object-cover"
                                     />

@@ -258,6 +258,8 @@ export default function EditBlogPage() {
                 <Image
                   src={formData.featuredImage}
                   alt="Featured"
+                  width={100}
+                  height={256}
                   className="w-full h-64 object-cover"
                 />
                 <button

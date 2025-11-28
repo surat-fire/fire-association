@@ -130,6 +130,8 @@ const MembersAdminPage = () => {
                                                             <Image
                                                                 src={m.imageFile}
                                                                 alt={m.name}
+                                                                width={100}
+                                                                height={100}
                                                                 className="h-full w-full object-cover"
                                                             />
                                                         ) : (

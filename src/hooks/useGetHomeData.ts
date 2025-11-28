@@ -5,9 +5,12 @@ const useGetHomeData = () => {
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["home-data"],
     queryFn: () => fetchHomeData(),
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchInterval: false,
   });
   return {
-    data: data || [],
+    data: data,
     isLoading,
     error,
     refetch,

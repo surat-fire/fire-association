@@ -7,7 +7,7 @@ export async function GET() {
   try {
     await connectDB();
     const [event, blog] = await Promise.all([
-      Event.findOne().sort({ date: -1 }),
+      Event.find().sort({ date: -1 }).limit(3),
       Blog.findOne({ isFeatured: true }).sort({ createdAt: -1 }),
     ]);
     return NextResponse.json({

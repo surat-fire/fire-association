@@ -202,6 +202,8 @@ export default function BlogsPage() {
                     <Image
                       src={blog.featuredImage}
                       alt={blog.title}
+                      width={100}
+                      height={100}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                   ) : (

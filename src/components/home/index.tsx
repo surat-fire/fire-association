@@ -8,22 +8,20 @@ import LogoSlider from "../common/LogoSlider";
 import HomeFeaturedBlog from "./HomeFeaturedBlog";
 import useGetHomeData from "@/hooks/useGetHomeData";
 import Loader from "../ui/Loader";
+import EventSection from "./EventSection";
 
 const LandingPage = () => {
 
   const { data, isLoading } = useGetHomeData()
 
-  if (isLoading) return <Loader />
-
-  console.log("data =======>", data)
-
   return (
     <React.Fragment>
       <HeroSection />
       <AboutSection />
+      <EventSection event={data?.event} isLoading={isLoading} />
       <WhyJoinSection />
       <LogoSlider />
-      <HomeFeaturedBlog title={data.blog.title} tag={data.blog.tags[0]} image={data.blog.featuredImage} id={data.blog._id} created_at={data.blog.createdAt} />
+      <HomeFeaturedBlog title={data?.blog?.title} tag={data?.blog?.tags[0]} image={data?.blog?.featuredImage} id={data?.blog?._id as string} created_at={data?.blog?.createdAt as any} isLoading={isLoading} />
     </React.Fragment>
   )
 }

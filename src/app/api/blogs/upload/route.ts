@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getTokenFromRequest, verifyToken } from '@/lib/auth';
-import { writeFile, mkdir } from 'fs/promises';
-import { join } from 'path';
-import { existsSync } from 'fs';
+import { saveFile } from '@/lib/fileHelper';
 
 export async function POST(request: NextRequest) {
   try {
@@ -52,30 +50,13 @@ export async function POST(request: NextRequest) {
       );
     }
     
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-    
-    // Create uploads directory if it doesn't exist
-    const uploadsDir = join(process.cwd(), 'public', 'uploads', 'blogs');
-    if (!existsSync(uploadsDir)) {
-      await mkdir(uploadsDir, { recursive: true });
-    }
-    
-    // Generate unique filename
-    const timestamp = Date.now();
-    const extension = file.name.split('.').pop();
-    const filename = `blog-${timestamp}.${extension}`;
-    const filepath = join(uploadsDir, filename);
-    
-    await writeFile(filepath, buffer);
-    
-    // Return the public URL
-    const publicUrl = `/uploads/blogs/${filename}`;
+    // Upload to Cloudinary
+    const cloudinaryUrl = await saveFile(file, 'blogs');
     
     return NextResponse.json({
       success: true,
-      url: publicUrl,
-      filename: filename
+      url: cloudinaryUrl,
+      filename: file.name
     });
   } catch (error) {
     console.error('Error uploading file:', error);

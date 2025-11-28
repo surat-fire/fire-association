@@ -46,10 +46,10 @@ export async function PUT(
     const role = formData.get("role");
 
     // Handle image
-    let imagePath = existing.image;
+    let imagePath = existing.imageFile;
     const imageFile = formData.get("imageFile") as File | null;
     if (imageFile && imageFile.size > 0) {
-      await deleteFile(existing.image);
+      await deleteFile(existing.imageFile);
       imagePath = await saveFile(imageFile, "users");
     }
 
