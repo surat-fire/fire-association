@@ -1,6 +1,8 @@
 // eslint-disable-next-line @typescript-eslint/no-require-imports
-require('dotenv').config({ path: '.env' });
-import { Schema, models, model, connect, disconnect } from 'mongoose';
+import dotenv from 'dotenv';
+dotenv.config({ path: '.env.local' });
+import mongoose from 'mongoose';
+const { Schema, models, model, connect, disconnect } = mongoose;
 import { hash } from 'bcryptjs';
 
 // Admin Schema
@@ -48,13 +50,13 @@ async function createSuperAdmin() {
     const mongoUri = process.env.MONGO_URI || 'mongodb://localhost:27017/fire-safety';
     console.log('Attempting to connect to MongoDB...');
     console.log('MongoDB URI:', mongoUri ? 'Set (hidden for security)' : 'Not set');
-    
+
     if (!process.env.MONGO_URI) {
       console.error('MONGO_URI environment variable is not set!');
       console.log('Please create a .env.local file with your MongoDB connection string.');
       process.exit(1);
     }
-    
+
     await connect(mongoUri);
     console.log('Connected to MongoDB successfully');
 
@@ -67,8 +69,8 @@ async function createSuperAdmin() {
 
     // Create super admin
     const superAdminData = {
-      email: 'admin@fire-safety.com',
-      password: await hash('admin123', 12),
+      email: 'thesuratfireassociation.in@gmail.com',
+      password: await hash('admin@123', 12),
       name: 'Super Admin',
       role: 'super_admin',
       isActive: true,
@@ -79,7 +81,7 @@ async function createSuperAdmin() {
 
     console.log('Super admin created successfully!');
     console.log('Email:', superAdmin.email);
-    console.log('Password: admin123');
+    console.log('Password: admin@123');
     console.log('Role:', superAdmin.role);
 
   } catch (error) {
