@@ -3,12 +3,6 @@
 import Link from 'next/link';
 
 export default function AdminDashboard() {
-  const stats = [
-    { name: 'Total Users', value: '1,234',  changeType: 'positive' },
-    { name: 'Active Events', value: '8',  changeType: 'positive' },
-    { name: 'Blog Posts', value: '45',  changeType: 'positive' },
-    { name: 'Members', value: '892',  changeType: 'positive' },
-  ];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
@@ -30,28 +24,6 @@ export default function AdminDashboard() {
               </div>
             </div>
           </div>
-        </div>
-
-        {/* Stats */}
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-8">
-          {stats.map((stat, index) => (
-            <div key={index} className="group relative bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[#490c0c]/5 to-transparent rounded-full -mr-16 -mt-16"></div>
-              <div className="p-6 relative">
-                <div className="flex items-start justify-between mb-4">
-                  <div className="w-12 h-12 bg-gradient-to-br from-[#490c0c] to-[#6b1414] rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
-                    <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-                    </svg>
-                  </div>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-500 mb-1">{stat.name}</p>
-                  <p className="text-3xl font-bold text-gray-900">{stat.value}</p>
-                </div>
-              </div>
-            </div>
-          ))}
         </div>
 
         {/* Quick Actions */}
